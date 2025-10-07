@@ -11,6 +11,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Backend is running!');
 });
+app.get("*",(req,res)=>{
+  res.send("Not Created Yet")
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
