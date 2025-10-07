@@ -50,7 +50,7 @@
 
 - **Frontend:** React.js 
 - **Backend:** Node.js + Express.js  
-- **Database:** MySQL  
+- **Database:** MySQL / Prisma ORM
 - **Authentication:** JWT / OAuth  
 - **Deployment:** Vercel  
 
