@@ -17,3 +17,16 @@ model Students {
   cgpa             Decimal
   createdAt        DateTime @default(now())
 }
+
+model Companies {
+  company_id      Int      @id @default(autoincrement())
+  company_name    String
+  company_status  String
+  createdAt       DateTime @default(now())
+}
+model Admins {
+  admin_id    Int      @id @default(autoincrement())
+  admin_name  String
+  email       String   @unique
+  createdAt   DateTime @default(now())
+}
