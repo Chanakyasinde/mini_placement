@@ -1,16 +1,14 @@
 import React from "react";
-import "../design/navbar.css";
+import "../styles/navbar.css";
 
-const Navbar = () => {
+export default function Navbar({ onShowLogin, onShowSignup }) {
   return (
     <nav className="navbar">
-      <div className="navbar-logo">Placement Portal</div>
-      <div className="navbar-buttons">
-        <button className="btn login-btn">Login</button>
-        <button className="btn signup-btn">Signup</button>
+      <h1 className="navbar-title">Placement Portal</h1>
+      <div className="button-group">
+        <button className="signup-btn" onClick={onShowSignup}>Sign Up</button>
+        <button className="login-btn" onClick={onShowLogin}>Login</button>
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
