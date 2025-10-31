@@ -9,7 +9,7 @@ export default function Login({ onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("All fields are required");
+      setError("All fields are Required");
       return;
     }
     if (!email.includes("@")) {
