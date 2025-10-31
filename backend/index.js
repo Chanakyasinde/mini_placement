@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const { PrismaClient } = require('@prisma/client');
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const authenticate = require("./middleware/authenticate.js");
 const authorize = require("./middleware/authorize.js");
@@ -20,6 +21,23 @@ const users = [
   { id: 2, username: "company1", password: "companypass", role: "company" },
   { id: 3, username: "student1", password: "studentpass", role: "student" },
 ];
+
+app.post("/signup", (req, res) => {
+  const  {username,password,role}= req.body;
+  if (!username || !password || !role) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const existingUser = users.find(u => u.username === username);
+  if (existingUser) {
+    return res.status(400).json({ message: "Username already exists" });
+  }
+
+  const newUser = { id: users.length + 1, username, password, role };
+  users.push(newUser);
+  res.status(201).json({ message: "Signup successfully" });
+
+}); 
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
