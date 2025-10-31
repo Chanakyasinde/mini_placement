@@ -10,15 +10,19 @@ const authenticate = (req, res, next) => {
   }
   
   const token = authHeader.split(" ")[1];
-
-  jwt.verify(token, JWT_SECRET, (err, userCheck) => {
-    if (err) {
-      return res.status(403).json({ message: "Invalid token" });
+  if(token){
+    if (!token) {
+      return res.status(401).json({ message: "Missing token" });
     }
-
+  }
+  try{
+    jwt.verify(token, JWT_SECRET, (err, userCheck) => {
     req.user = userCheck;
     next();
   });
+  }catch(err){
+    return res.status(403).json({ message: "Invalid token" });
+  }
   
 };
 
