@@ -39,7 +39,7 @@ exports.post_student = async (req,res) => {
       }
 }
 
-exports.get_students = async (req,res) => {
+exports.get_users = async (req,res) => {
     const { role,email, password } = req.body;
     if (!role || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -62,10 +62,11 @@ exports.get_students = async (req,res) => {
                 return res.status(200).json({ message: "Login successful", token });
             }
         catch(err) {
-                res.status(500).json({ message: "Server error", error: err.message });
+                return res.status(500).json({ message: "Server error", error: err.message });
         }
     }
-        else if (role == 'company'){
+     else if (role == 'company'){
+        try{
             const user2 = await prisma.companies.findFirst({
                 where: {
                     email:email
@@ -81,7 +82,13 @@ exports.get_students = async (req,res) => {
             const token = jwt.sign({ id: user2.id, username: user2.company_name, role: role }, JWT_SECRET);
             return res.status(200).json({ message: "Login successful", token });
         }
-        else if (role == 'admin'){
+        catch(err){
+            return res.status(500).json({ message: "Server error", error: err.message });
+        }
+    }
+    else if (role == 'admin'){
+
+        try{
             const user3 = await prisma.admins.findFirst({
                 where: {
                     email:email
@@ -97,5 +104,9 @@ exports.get_students = async (req,res) => {
             const token = jwt.sign({ id: user3.id, username: user3.admin_name, role: role }, JWT_SECRET);
             return res.status(200).json({ message: "Login successful", token });
         }
+        catch(err){
+                return res.status(500).json({ message: "Server error", error: err.message });
+        }
+    }
         
 }
