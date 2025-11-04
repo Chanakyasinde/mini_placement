@@ -10,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT;
 const JWT_SECRET = process.env.JWT_SECRET;
 const prisma = new PrismaClient();
+const control = require('./routes/control.js')
 app.use(cors());
 app.use(express.json());
 const users = [
@@ -17,24 +18,9 @@ const users = [
   { id: 2, username: "company1", password: "companypass", role: "company" },
   { id: 3, username: "student1", password: "studentpass", role: "student" },
 ];
-app.post("/signup", async (req, res) => {
-  try {
-    const  {username,password,role}= req.body;
-    if (!username || !password || !role) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    const existingUser = users.find(u => u.username === username);
-    if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = { id: users.length + 1, username, password: hashedPassword, role };
-    users.push(newUser);
-    res.status(201).json({ message: "Signup successfully" });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-});
+// Signup code is written in control.js to keep it clean
+app.post("/signup", control.get_student);
+
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
