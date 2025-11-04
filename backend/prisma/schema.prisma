@@ -10,12 +10,10 @@ datasource db {
 model Students {
   student_id       Int      @id @default(autoincrement())
   student_name     String
+  password         String
   phone_number     BigInt   @unique
   email            String   @unique
   resume_link      String
-  year_passed_out  String?
-  cgpa             Decimal
-  createdAt        DateTime @default(now())
 }
 
 model Companies {
