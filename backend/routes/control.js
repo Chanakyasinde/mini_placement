@@ -59,7 +59,13 @@ exports.get_users = async (req,res) => {
                 return res.status(401).json({ message: "Invalid username or password" });
                 }
                 const token = jwt.sign({ id: user1.id, username: user1.student_name, role: role }, JWT_SECRET);
-                return res.status(200).json({ message: "Login successful", token });
+                const safeUser = {
+                    ...user1,
+                    phone_number: user1.phone_number.toString()
+                  };
+                  
+                return res.status(200).json({ message: "Login successful", token, user: safeUser });
+
             }
         catch(err) {
                 return res.status(500).json({ message: "Server error", error: err.message });
