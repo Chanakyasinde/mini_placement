@@ -18,7 +18,7 @@ app.use(express.json());
 app.post("/signup", control.post_student);
 
 // Login code is written in control.js to keep it clean
-app.post("/login", control.get_users);
+app.get("/login", control.get_users);
 
 
 app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
