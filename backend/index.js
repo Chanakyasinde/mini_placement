@@ -19,28 +19,12 @@ const users = [
   { id: 3, username: "student1", password: "studentpass", role: "student" },
 ];
 // Signup code is written in control.js to keep it clean
-app.post("/signup", control.get_student);
+app.post("/signup", control.post_student);
 
-app.post("/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    const user = users.find(u => u.username === username );
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-    const token = jwt.sign({ id: user.id, username: user.username, role: user.role }, JWT_SECRET);
-    res.json({ message: "Login successful", token });
-  } catch(err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-});
+// Login code is written in control.js to keep it clean
+app.post("/login", control.get_students);
+
+
 app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
   res.send(`Welcome to admin dashboard, ${req.user.username}`);
 });
