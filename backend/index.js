@@ -13,16 +13,12 @@ const prisma = new PrismaClient();
 const control = require('./routes/control.js')
 app.use(cors());
 app.use(express.json());
-const users = [
-  { id: 1, username: "admin1", password: "adminpass", role: "admin" },
-  { id: 2, username: "company1", password: "companypass", role: "company" },
-  { id: 3, username: "student1", password: "studentpass", role: "student" },
-];
+
 // Signup code is written in control.js to keep it clean
 app.post("/signup", control.post_student);
 
 // Login code is written in control.js to keep it clean
-app.post("/login", control.get_students);
+app.post("/login", control.get_users);
 
 
 app.get("/admin", authenticate, authorize(["admin"]), (req, res) => {
