@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import Home from "./pages/Home";
-import Navbar from "./components/Navbar";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import React from "react";
+import Navigation from "./components/Navigation";
+import MainSection from "./components/Mainsection";
+import "./components/styles/global.css";
+import "./App.css";
 
-export default function App() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
-
+function App() {
   return (
-    <>
-      <Navbar onShowLogin={() => setShowLogin(true)} onShowSignup={() => setShowSignup(true)} />
-      <Home onShowLogin={() => setShowLogin(true)} onShowSignup={() => setShowSignup(true)} />
-      {showLogin && <Login onClose={() => setShowLogin(false)} />}
-      {showSignup && <Signup onClose={() => setShowSignup(false)} />}
-    </>
+    <div className="app-container">
+      <Navigation />
+      <MainSection />
+
+    </div>
   );
 }
+
+export default App;
