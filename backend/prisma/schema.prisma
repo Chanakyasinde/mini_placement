@@ -16,12 +16,18 @@ model Students {
   resume_link      String
 }
 
-model Companies {
-  company_id      Int      @id @default(autoincrement())
-  company_name    String
-  company_status  String
-  createdAt       DateTime @default(now())
+model companies {
+  companyId      Int      @id @default(autoincrement())
+  companyName    String   @unique
+  email          String   @unique
+  websiteUrl     String?  // optional — some companies may not have a site
+  companyType    String?  // e.g., Startup, MNC, NGO
+  industry       String?  // e.g., IT, Finance, Core
+  location       String?  // city or region
+  createdAt      DateTime @default(now())
 }
+
+
 model Admins {
   admin_id    Int      @id @default(autoincrement())
   admin_name  String
