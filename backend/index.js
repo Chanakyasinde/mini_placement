@@ -14,8 +14,12 @@ const control = require('./routes/control.js')
 app.use(cors());
 app.use(express.json());
 
+const companyRoutes = require("./company/routes.js");
+app.use("/signup", companyRoutes);
+
+
 // Signup code is written in control.js to keep it clean
-app.post("/signup", control.post_student);
+// app.post("/signup", control.post_student);
 
 // Login code is written in control.js to keep it clean
 app.get("/login", control.get_users);
