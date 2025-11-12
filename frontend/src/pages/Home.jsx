@@ -1,41 +1,48 @@
-import React from "react";
-import Navbar from "../components/Navbar";
-import "../styles/home.css";
+import React, { useState } from "react";
+import Navigation from "../components/storage/Navigation";
+import "../components/styles/home.css";
 
-export default function Home({ onShowLogin, onShowSignup }) {
+export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    console.log("Searching for:", searchQuery);
+
+  };
+
   return (
-    <div className="home-container">
-      <Navbar onShowLogin={onShowLogin} onShowSignup={onShowSignup} />
+    <div className="app-container">
+      <Navigation/>
+      <section className="main-section">
+        <div className="main-container">
 
-      <section className="hero-section">
-        <h2 className="hero-title">Welcome to Placement Portal</h2>
-        <p className="hero-text">
-          Your gateway to successful career opportunities. Connect with top companies,
-          showcase your skills, and land your dream job with our comprehensive placement platform.
-        </p>
-      </section>
+          <h1 className="main-title">
+            Your Gateway to <span className="highlight">Dream Career</span>
+          </h1>
 
-      <section className="info-section">
-        <div className="info-card">
-          <h3>For Students</h3>
-          <p>
-            Create your profile, upload resumes, and apply to multiple job opportunities. 
-            Track your application status in real-time.
+
+          <p className="main-subtitle">
+            Connect with top companies, explore exciting opportunities, and kickstart your professional journey with
+            PlacementHub.
           </p>
-        </div>
-        <div className="info-card">
-          <h3>For Companies</h3>
-          <p>
-            Post job openings, review candidate profiles, and schedule interviews. 
-            Find the perfect talent for your organization.
-          </p>
-        </div>
-        <div className="info-card">
-          <h3>Easy Management</h3>
-          <p>
-            Streamlined placement process with automated notifications, interview scheduling,
-            and comprehensive analytics.
-          </p>
+
+
+          <div className="search-container">
+            <div className="search-box">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Search jobs, companies, or roles..."
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              />
+            </div>
+            <button className="btn-search" onClick={handleSearch}>
+              Search Jobs →
+            </button>
+          </div>
         </div>
       </section>
     </div>
