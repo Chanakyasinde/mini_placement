@@ -1,5 +1,5 @@
-import "./styles/navigation.css";
-
+import "../styles/navigation.css";
+import { Link } from "react-router-dom";
 export default function Navigation() {
   return (
     <nav className="navbar">
@@ -26,7 +26,9 @@ export default function Navigation() {
 
 
         <div className="navbar-auth">
-          <button className="btn-login">Login</button>
+          <Link to={'/LoginStudent'}>
+            <button className="btn-login">Login</button>
+          </Link>
           <button className="btn-signup">Sign Up</button>
         </div>
       </div>

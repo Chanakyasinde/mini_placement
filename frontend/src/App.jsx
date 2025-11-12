@@ -1,15 +1,17 @@
 import React from "react";
-import Navigation from "./components/Navigation";
-import MainSection from "./components/Mainsection";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./components/styles/global.css";
+import Home from "./pages/Home"
+import LoginStudent from "./pages/LoginStudent";
 
 function App() {
   return (
-    <div className="app-container">
-      <Navigation />
-      <MainSection />
-
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/LoginStudent" element={<LoginStudent />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
