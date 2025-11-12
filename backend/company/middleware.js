@@ -7,6 +7,9 @@ const verifyCompanydetails = (req, res, next) => {
   if (!email || typeof email !== "string" || !email.includes("@")) {
       throw new Error("A valid email address is required");
     }
+    
   next();
 }
+
+
 module.exports = { verifyCompanydetails };

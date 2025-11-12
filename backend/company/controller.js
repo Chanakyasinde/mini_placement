@@ -1,12 +1,25 @@
-const { createCompanyifnotExists } = require('../company/services.js')
+const { createCompanyifnotExists,checkCompanyExists } = require('../company/services.js')
 const postCompany = async (req, res) => {
   const companyData = req.body;
-  console.log("Received company data:", companyData);
+  
   try {
     const newCompany = await createCompanyifnotExists(companyData);
     res.status(201).json(newCompany);
-  } catch (error) {
+  } catch (error){
     res.status(400).json({ error: error.message });
   }
 }
-module.exports = { postCompany };
+
+const companylogin = async (req, res) => {
+  const companyData = req.body;
+  try {
+    const companyname = await checkCompanyExists(companyData);
+    res.status(200).json(companyname);
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+}
+
+
+
+module.exports = { postCompany , companylogin};
