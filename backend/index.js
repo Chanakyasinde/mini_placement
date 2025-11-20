@@ -13,6 +13,7 @@ const companyRoutes = require("./company/routes.js");
 app.use("/company", companyRoutes)
 
 
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

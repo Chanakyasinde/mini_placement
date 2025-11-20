@@ -20,10 +20,11 @@ model companies {
   companyId      Int      @id @default(autoincrement())
   companyName    String   @unique
   email          String   @unique
-  websiteUrl     String?  // optional — some companies may not have a site
-  companyType    String?  // e.g., Startup, MNC, NGO
-  industry       String?  // e.g., IT, Finance, Core
-  location       String?  // city or region
+  password       String?
+  websiteUrl     String?
+  companyType    String?
+  industry       String?
+  location       String?
   createdAt      DateTime @default(now())
 }
 
