@@ -29,7 +29,9 @@ export default function Navigation() {
           <Link to={'/LoginStudent'}>
             <button className="btn-login">Login</button>
           </Link>
-          <button className="btn-signup">Sign Up</button>
+          <Link to={'/Signup'}>   
+            <button className="btn-signup">Sign Up</button>
+          </Link>
         </div>
       </div>
     </nav>
