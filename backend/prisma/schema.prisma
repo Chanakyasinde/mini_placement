@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Students {
@@ -12,6 +13,7 @@ model Students {
   password         String
   phone_number     BigInt   @unique
   email            String   @unique
+  college          String   @default("Unknown")
   resume_link      String
 }
 

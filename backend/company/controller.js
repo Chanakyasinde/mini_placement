@@ -1,7 +1,7 @@
-const { createCompanyifnotExists,checkCompanyExists } = require('../company/services.js')
+const { createCompanyifnotExists,checkCompanyExists } = require('./services.js')
 const postCompany = async (req, res) => {
   const companyData = req.body;
-  console.log(companyData);
+  console.log("Recienved in controller page",companyData);
   
   try {
     const newCompany = await createCompanyifnotExists(companyData);
