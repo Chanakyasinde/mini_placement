@@ -1,36 +1,18 @@
-// import React,{useState} from 'react'
-
-// export default function LoginStudent(){
-//   const [name,setName] = useState('')
-  
-//   return (
-//     <div>
-//         <h1>Login page</h1>
-//         <input
-//         placeholder='Enter your email'
-//         value={name}
-//         onChange={(e)=>{setName(e.target.value)}}
-//         />
-//         <input
-//         placeholder='Enter your email'
-//         value={name}
-//         onChange={(e)=>{setName(e.target.value)}}
-//         />
-        
-//     </div>
-//   )
-// }
 import React, { useState, useEffect } from "react";
 import { User, Briefcase, ChevronRight, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate()
   const [selected, setSelected] = useState("student");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const [studentLogin, setStudentLogin] = useState({
     email: "",
+    phoneNumber: "",
     password: "",
   });
+  
 
   const [companyLogin, setCompanyLogin] = useState({
     email: "",
@@ -53,6 +35,12 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (selected === "student") {
+      if (!studentLogin.email && !studentLogin.phoneNumber) {
+        return alert("Enter either Email or Phone Number");
+      }
+    }
+
     const endpoint =
       selected === "student" ? "/student/login" : "/company/login";
 
@@ -64,6 +52,10 @@ export default function Login() {
       });
 
       const data = await res.json();
+      if(res.status===200){
+        localStorage.setItem(`${selected}auth`, "true");
+        navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
+      }
       console.log("Login Response:", data);
     } catch (error) {
       console.error("Login Error:", error);
@@ -125,7 +117,14 @@ export default function Login() {
               <div key={key} style={styles.inputGroup}>
                 <label style={styles.label}>{key}</label>
                 <input
-                  type={key.includes("password") ? "password" : "email"}
+                  type={
+                    key === "password"
+                      ? "password"
+                      : key === "phoneNumber"
+                      ? "text"
+                      : "email"
+                  }
+                  
                   name={key}
                   value={value}
                   onChange={handleChange}

@@ -26,10 +26,10 @@ export default function Navigation() {
 
 
         <div className="navbar-auth">
-          <Link to={'/LoginStudent'}>
+          <Link to={'/login'}>
             <button className="btn-login">Login</button>
           </Link>
-          <Link to={'/Signup'}>   
+          <Link to={'/signup'}>   
             <button className="btn-signup">Sign Up</button>
           </Link>
         </div>
