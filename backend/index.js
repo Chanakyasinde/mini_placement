@@ -9,8 +9,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-const companyRoutes = require("./company/routes.js");
+const companyRoutes = require("./company/routes/routes.js");
+const StudentRoutes = require("./student/routes/catalog.js");
 app.use("/company", companyRoutes)
+app.use('/student',StudentRoutes)
 
 
 

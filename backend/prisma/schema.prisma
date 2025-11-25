@@ -9,9 +9,9 @@ datasource db {
 
 model Students {
   student_id       Int      @id @default(autoincrement())
-  student_name     String
+  studentName     String
   password         String
-  phone_number     BigInt   @unique
+  phoneNumber     BigInt   @unique
   email            String   @unique
   college          String   @default("Unknown")
   resume_link      String
