@@ -1,22 +1,259 @@
-import React,{useState} from 'react'
+// import React,{useState} from 'react'
 
-export default function LoginStudent(){
-  const [name,setName] = useState('')
+// export default function LoginStudent(){
+//   const [name,setName] = useState('')
   
-  return (
-    <div>
-        <h1>Login page</h1>
-        <input
-        placeholder='Enter your email'
-        value={name}
-        onChange={(e)=>{setName(e.target.value)}}
-        />
-        <input
-        placeholder='Enter your email'
-        value={name}
-        onChange={(e)=>{setName(e.target.value)}}
-        />
+//   return (
+//     <div>
+//         <h1>Login page</h1>
+//         <input
+//         placeholder='Enter your email'
+//         value={name}
+//         onChange={(e)=>{setName(e.target.value)}}
+//         />
+//         <input
+//         placeholder='Enter your email'
+//         value={name}
+//         onChange={(e)=>{setName(e.target.value)}}
+//         />
         
+//     </div>
+//   )
+// }
+import React, { useState, useEffect } from "react";
+import { User, Briefcase, ChevronRight, Check } from "lucide-react";
+
+export default function Login() {
+  const [selected, setSelected] = useState("student");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const [studentLogin, setStudentLogin] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [companyLogin, setCompanyLogin] = useState({
+    email: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    const resizeHandler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", resizeHandler);
+    return () => window.removeEventListener("resize", resizeHandler);
+  }, []);
+
+  const formState = selected === "student" ? studentLogin : companyLogin;
+  const setFormState =
+    selected === "student" ? setStudentLogin : setCompanyLogin;
+
+  const handleChange = (e) => {
+    setFormState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const endpoint =
+      selected === "student" ? "/student/login" : "/company/login";
+
+    try {
+      const res = await fetch(`http://localhost:3000${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await res.json();
+      console.log("Login Response:", data);
+    } catch (error) {
+      console.error("Login Error:", error);
+    }
+  };
+
+  return (
+    <div style={styles.page}>
+      <div style={{ ...styles.leftPane, width: isMobile ? "100%" : "40%" }}>
+        <h1 style={styles.heading}>
+          Who is <span style={styles.highlight}>logging in?</span>
+        </h1>
+
+        <div
+          style={{
+            ...styles.roleCard,
+            ...(selected === "student"
+              ? styles.activeCard
+              : styles.inactiveCard),
+          }}
+          onClick={() => setSelected("student")}
+        >
+          <div style={styles.roleContent}>
+            <User style={styles.icon} />
+            <span>Student</span>
+          </div>
+          {selected === "student" ? <Check /> : <ChevronRight style={styles.arrow} />}
+        </div>
+
+        <div
+          style={{
+            ...styles.roleCard,
+            ...(selected === "company"
+              ? styles.activeCard
+              : styles.inactiveCard),
+          }}
+          onClick={() => setSelected("company")}
+        >
+          <div style={styles.roleContent}>
+            <Briefcase style={styles.icon} />
+            <span>Company</span>
+          </div>
+          {selected === "company" ? <Check /> : <ChevronRight style={styles.arrow} />}
+        </div>
+
+        <p style={styles.helperText}>
+          Choose your role to log in and access your dashboard.
+        </p>
+      </div>
+
+      <div style={styles.rightPane}>
+        <div style={styles.formContainer}>
+          <h2 style={styles.formHeading}>
+            {selected === "student" ? "Student Login" : "Company Login"}
+          </h2>
+
+          <form onSubmit={handleSubmit}>
+            {Object.entries(formState).map(([key, value]) => (
+              <div key={key} style={styles.inputGroup}>
+                <label style={styles.label}>{key}</label>
+                <input
+                  type={key.includes("password") ? "password" : "email"}
+                  name={key}
+                  value={value}
+                  onChange={handleChange}
+                  style={styles.input}
+                />
+              </div>
+            ))}
+
+            <button type="submit" style={styles.button}>
+              {selected === "student" ? "Login as Student" : "Login as Company"}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
+
+const styles = {
+  page: { backgroundColor: "#000", minHeight: "100vh", color: "#fff", display: "flex" },
+
+  leftPane: {
+    padding: 48,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    height: "100vh",
+  },
+
+  heading: {
+    fontSize: 40,
+    fontWeight: 800,
+    marginBottom: 32,
+  },
+
+  highlight: { color: "#fff" },
+
+  roleCard: {
+    padding: "16px 24px",
+    borderRadius: 16,
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+    transition: "0.2s",
+  },
+
+  activeCard: {
+    backgroundColor: "#fff",
+    color: "#000",
+    border: "4px solid #fff",
+  },
+
+  inactiveCard: {
+    backgroundColor: "#1f2937",
+    border: "2px solid #4b5563",
+  },
+
+  roleContent: {
+    display: "flex",
+    alignItems: "center",
+    fontWeight: 700,
+  },
+
+  icon: {
+    marginRight: 12,
+  },
+
+  arrow: {
+    opacity: 0.5,
+  },
+
+  helperText: {
+    marginTop: 12,
+    opacity: 0.6,
+  },
+
+  rightPane: {
+    width: "60%",
+    display: "flex",
+    justifyContent: "center",
+    padding: 48,
+    backgroundColor: "#1f2937",
+  },
+
+  formContainer: {
+    width: "90%",
+    maxWidth: 600,
+    backgroundColor: "#111827",
+    padding: 40,
+    borderRadius: 20,
+  },
+
+  formHeading: {
+    textAlign: "center",
+    fontWeight: 800,
+    marginBottom: 25,
+  },
+
+  inputGroup: {
+    marginBottom: 20,
+  },
+
+  label: {
+    marginBottom: 6,
+    display: "block",
+    fontWeight: 500,
+    color: "#e5e7eb",
+  },
+
+  input: {
+    width: "100%",
+    padding: 10,
+    borderRadius: 8,
+    backgroundColor: "#374151",
+    color: "#fff",
+    border: "1px solid #4b5563",
+  },
+
+  button: {
+    width: "100%",
+    padding: 14,
+    marginTop: 20,
+    backgroundColor: "#fff",
+    color: "#000",
+    borderRadius: 10,
+    fontWeight: 800,
+    cursor: "pointer",
+  },
+};

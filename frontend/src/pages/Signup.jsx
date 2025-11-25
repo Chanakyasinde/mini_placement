@@ -4,7 +4,6 @@ import { User, Briefcase, ChevronRight, Check } from "lucide-react";
 export default function Signup() {
   const [selected, setSelected] = useState("student");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  console.log('Enterred asdasdas')
 
   const [studentForm, setStudentForm] = useState({
     student_name: "",
