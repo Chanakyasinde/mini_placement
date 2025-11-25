@@ -20,8 +20,8 @@
     "nodemon": "^3.1.10"
   },
   "devDependencies": {
-    "@prisma/client": "^7.0.0",
+    "@prisma/client": "^5.16.0",
     "@types/node": "^24.10.1",
-    "prisma": "^7.0.0"
+    "prisma": "^5.16.0"
   }
 }
