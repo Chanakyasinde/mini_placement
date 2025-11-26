@@ -1,4 +1,4 @@
- const { createStudentSignup,checkStudentLogin } = require('../services/services.js')
+const { createStudentSignup,checkStudentLogin } = require('../services/services.js')
 const studentSignUp = async (req, res) => {
     const studentData = req.body;
 

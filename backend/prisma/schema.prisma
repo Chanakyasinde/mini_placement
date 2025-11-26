@@ -27,12 +27,29 @@ model companies {
   industry       String?
   location       String?
   createdAt      DateTime @default(now())
+  jobs           jobs[]
 }
-
 
 model Admins {
   admin_id    Int      @id @default(autoincrement())
   admin_name  String
   email       String   @unique
   createdAt   DateTime @default(now())
+}
+
+model jobs {
+  jobId      Int        @id @default(autoincrement())
+  companyId   Int
+  company     companies  @relation(fields: [companyId], references: [companyId])
+  jobTitle   String
+  isActive    Boolean    @default(true)
+  stipend     String?
+  description String?
+  createdAt   DateTime   @default(now())
+  skills      skills[]   @relation("JobSkills")
+}
+model skills{
+  skillId   Int @id @default(autoincrement())
+  skillName String @unique
+  jobs  jobs[]   @relation("JobSkills")
 }
