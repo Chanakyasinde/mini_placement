@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt');
 
 const createCompanyifnotExists = async (companyData) => {
   const { email, companyName } = companyData;
-  const existingCompany = await prisma.companies.findFirst({
+  const alreadyExists = await prisma.companies.findFirst({
     where: { OR: [{ email }, { companyName }] }
   });
 
 
-  if (existingCompany) {
+  if (alreadyExists) {
     throw new Error('Company with this email or company name already exists');
   }
   const hashedPassword = await bcrypt.hash(companyData.password, 10);
@@ -40,6 +40,7 @@ const existingCompany = async (email) => {
   }
   return company;
 }
+
 
 const createJobIfNotExists = async (jobData) => {
   const alreadyActive = await prisma.jobs.findFirst({
