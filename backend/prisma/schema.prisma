@@ -27,12 +27,29 @@ model companies {
   industry       String?
   location       String?
   createdAt      DateTime @default(now())
+  jobs           jobs[]  // one company -> many jobs
 }
-
 
 model Admins {
   admin_id    Int      @id @default(autoincrement())
   admin_name  String
   email       String   @unique
   createdAt   DateTime @default(now())
+}
+
+model jobs {
+  job_id      Int        @id @default(autoincrement())
+  companyName String
+  company     companies  @relation(fields: [companyName], references: [companyName])
+
+  job_title   String
+  isActive    Boolean    @default(true)
+  stipend     String?
+  description String?
+  skills      skills[]   // many-to-many
+}
+model skills{
+  skill_id   Int @id @default(autoincrement())
+  skill_name String @unique
+  jobs  jobs[]
 }
