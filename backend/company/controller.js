@@ -16,11 +16,11 @@ const postCompany = async (req, res) => {
 
 
 const companylogin = async (req, res) => {
-  const {email,loginpassword} = req.body;
+  const {email,password} = req.body;
   try{
-    const existingCompany = await checkCompanyExists( email );
-    const storedPassword = existingCompany.password;
-    const passwordMatch = await bcrypt.compare(loginpassword, storedPassword);
+    const existing = await existingCompany( email );
+    const storedPassword = existing.password;
+    const passwordMatch = await bcrypt.compare(password, storedPassword);
     if (!passwordMatch) {
       return res.status(401).json({ error: 'Invalid password' });
 
@@ -29,7 +29,7 @@ const companylogin = async (req, res) => {
 
     return res.status(200).json({ 
       message: 'Login successful', 
-      token 
+      token :token
     });
 
   }
@@ -43,20 +43,12 @@ const companydashboard = async (req, res) => {
     const loggedInEmail = req.companyEmail; // From authentication middleware
     const company = await existingCompany(loggedInEmail);
 
-    const company_name= company.companyName;
 
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
 
-    const paramCompanyName = req.params.companyName;
-
-    // Authorization check
-    if (company.companyName !== paramCompanyName) {
-      return res.status(403).json({ 
-        error: "Unauthorized: You cannot access another company's dashboard" 
-      });
-    }
+    
     return res.status(200).json({
       message: "Dashboard data fetched successfully",
       company: {
@@ -66,8 +58,7 @@ const companydashboard = async (req, res) => {
         industry: company.industry,
         location: company.location,
         website: company.website,
-        companyType: company.companyType,
-        jobsPosted: company.jobs
+        companyType: company.companyType
       }
     });
   } catch (error) {

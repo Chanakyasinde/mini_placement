@@ -7,8 +7,8 @@ const { createJobs,getJobs } = require('./controllers/handleJobs.js')
 const router1 = express.Router();
 
 router1.post("/signup", verifyCompanydetails, postCompany);
-router1.post("/login", verifyCompanydetails, companylogin);
-router1.get("/dashboard/:companyName", authMiddleware, companydashboard);
+router1.post("/login",companylogin);
+router1.get("/dashboard", authMiddleware, companydashboard);
 router1.post("/dashboard/job", authMiddleware, createJobs);
 router1.get("/dashboard/job", authMiddleware,getJobs);
 
