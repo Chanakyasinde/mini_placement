@@ -9,7 +9,9 @@ app.use(cors());
 app.use(express.json());
 
 const companyRoutes = require("./company/routes.js");
+const studentRoutes = require("./student/routes/catalog.js");
 app.use("/company", companyRoutes)
+app.use("/student",studentRoutes)
 
 
 app.listen(PORT, () => {

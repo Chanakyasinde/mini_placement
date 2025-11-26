@@ -8,14 +8,17 @@ const createCompanyifnotExists = async (companyData) => {
     where: { OR: [{ email }, { companyName }] }
   });
 
+
   if (existingCompany) {
     throw new Error('Company with this email or company name already exists');
   }
+  const hashedPassword = await bcrypt.hash(companyData.password, 10);
+
   const newCompany = await prisma.companies.create({
     data: {
       companyName: companyData.companyName,
       email: companyData.email,
-      password: await bcrypt.hash(companyData.password, 10),
+      password: hashedPassword,
       address: companyData.address,
       phone: companyData.phone,
       website: companyData.website,
@@ -38,4 +41,35 @@ const existingCompany = async (email) => {
   return company;
 }
 
-module.exports = { createCompanyifnotExists , existingCompany};
+const createJobIfNotExists = async (jobData) => {
+  const alreadyActive = await prisma.jobs.findFirst({
+    where: {
+      companyId:jobData.companyId,
+      jobTitle:jobData.jobTitle,
+      isActive:true
+    }
+  })
+  if(alreadyActive){
+    throw new Error('An active job with this title already exists for the company');
+  }
+  const newJob = await prisma.jobs.create({
+    data: {
+      companyId: jobData.companyId,
+      jobTitle: jobData.jobTitle,
+      isActive: true,
+      stipend: jobData.stipend,
+      description: jobData.description,
+      skills: {
+      connectOrCreate: jobData.skills.map(skill => ({
+        where: { skillName: skill },
+        create: { skillName: skill }
+      }))
+    }
+    },
+    include: { skills: true }
+  })
+  return newJob;
+
+}
+
+module.exports = { createCompanyifnotExists , existingCompany,createJobIfNotExists};

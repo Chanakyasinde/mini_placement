@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { User, Briefcase, ChevronRight, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+  const navigate = useNavigate()
   const [selected, setSelected] = useState("student");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const [studentForm, setStudentForm] = useState({
-    student_name: "",
+    studentName: "",
     password: "",
-    phone_number:"",
+    phoneNumber:"",
     email: "",
     college: "",
     resume_link:"",
@@ -49,6 +51,10 @@ export default function Signup() {
     });
 
     const data = await res.json();
+    if(res.status===200){
+      localStorage.setItem(`${selected}auth`, "true");
+      navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
+    }
     console.log("Response from server:", data);
 
   } catch (error) {
