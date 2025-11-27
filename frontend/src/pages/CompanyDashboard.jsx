@@ -4,14 +4,13 @@ import '../components/styles/global.css';
 
 const CompanyDashboard = () => {
     const navigate = useNavigate();
-    // const { companyName } = useParams(); // Removed useParams
     const [companyData, setCompanyData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchDashboardData();
-    }, []); // Removed dependency on companyName
+    }, []);
 
     const fetchDashboardData = async () => {
         try {
@@ -23,7 +22,8 @@ const CompanyDashboard = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/api/company/dashboard`, {
+            const response = await fetch(`http://localhost:3000/company/dashboard`, {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
