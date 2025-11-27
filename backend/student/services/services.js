@@ -34,16 +34,10 @@ const createStudentSignup = async (studentData) => {
 }
 
 const checkStudentLogin = async (studentData) => {
-
-    const phoneAsBigInt = BigInt(studentData.phoneNumber);
-
+    console.log("Entered check student login service")
+    
     const checkLogin = await prisma.students.findFirst({
-        where: {
-            OR: [
-                {email:studentData.email},
-                {phoneNumber: phoneAsBigInt}
-            ]
-        }
+        where: {email : studentData.email}
     })
 
     if(!checkLogin){
@@ -58,4 +52,15 @@ const checkStudentLogin = async (studentData) => {
     return checkLogin
 
 }
-module.exports = {createStudentSignup,checkStudentLogin}
+
+const studentInformation = async (studentEmail) => {
+    console.log("entered services of dashboard")
+    const studentInfo = await prisma.students.findUnique({
+        where: {
+            email: studentEmail
+        }
+    })
+
+    return studentInfo
+}
+module.exports = {createStudentSignup,checkStudentLogin,studentInformation}

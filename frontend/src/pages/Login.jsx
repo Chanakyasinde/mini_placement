@@ -9,7 +9,6 @@ export default function Login() {
 
   const [studentLogin, setStudentLogin] = useState({
     email: "",
-    phoneNumber: "",
     password: "",
   });
 
@@ -35,6 +34,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    localStorage.clear()
     if (selected === "student") {
       if (!studentLogin.email && !studentLogin.phoneNumber) {
         return alert("Enter either Email or Phone Number");
@@ -52,14 +52,13 @@ export default function Login() {
       });
 
       const data = await res.json();
-      if (res.status === 200) {
-        localStorage.setItem(`${selected}auth`, "true");
-        localStorage.setItem(`${selected}Token`, data.token);
-        navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
-      }
+      localStorage.setItem(`${selected}Token`, data.token);
+      navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
       console.log("Login Response:", data);
+      
     } catch (error) {
       console.error("Login Error:", error);
+      alert("An error occurred during login. Please try again.");
     }
   };
 
@@ -121,8 +120,6 @@ export default function Login() {
                   type={
                     key === "password"
                       ? "password"
-                      : key === "phoneNumber"
-                        ? "text"
                         : "email"
                   }
 

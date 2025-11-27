@@ -23,24 +23,16 @@ const studentValidateSignUp = (req, res, next) => {
 };
 
 const studentValidateLogin = (req, res, next) => {
-    const { phoneNumber, email, password } = req.body;
+    const {  email,password } = req.body;
     console.log("Entered login middleware");
 
     if (!password || typeof password !== "string" || password.trim().length < 6) {
         return res.status(400).json({ message: "Invalid Password" });
     }
 
-    if (!email && !phoneNumber) {
-        return res.status(400).json({ message: "Provide either email or phoneNumber" });
+    if (!email) {
+        return res.status(400).json({ message: "Provide your email" });
     }
-
-    if (phoneNumber) {
-
-        if (phoneNumber.trim().length !== 10 || isNaN(Number(phoneNumber))) {
-            return res.status(400).json({ message: "Invalid Phone Number" });
-        }
-    }
-
     if (email) {
         if (typeof email !== "string" || !email.includes("@")) {
             return res.status(400).json({ message: "Invalid Email" });
