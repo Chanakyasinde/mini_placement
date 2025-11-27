@@ -12,7 +12,7 @@ export default function Login() {
     phoneNumber: "",
     password: "",
   });
-  
+
 
   const [companyLogin, setCompanyLogin] = useState({
     email: "",
@@ -52,8 +52,9 @@ export default function Login() {
       });
 
       const data = await res.json();
-      if(res.status===200){
+      if (res.status === 200) {
         localStorage.setItem(`${selected}auth`, "true");
+        localStorage.setItem(`${selected}Token`, data.token);
         navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
       }
       console.log("Login Response:", data);
@@ -121,10 +122,10 @@ export default function Login() {
                     key === "password"
                       ? "password"
                       : key === "phoneNumber"
-                      ? "text"
-                      : "email"
+                        ? "text"
+                        : "email"
                   }
-                  
+
                   name={key}
                   value={value}
                   onChange={handleChange}

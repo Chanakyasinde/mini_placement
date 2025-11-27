@@ -4,10 +4,11 @@ import "./components/styles/global.css";
 import Home from "./pages/Home"
 import LoginStudent from "./pages/Login";
 import Signup from "./pages/Signup";
-import CompnayDashboard from "./pages/CompnayDashboard"
+import CompanyDashboard from "./pages/CompanyDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import StudentProtectedRoute from "./components/storage/StudentProtectedRoute";
 import CompanyProtectedRoute from "./components/storage/CompanyProtectedRoute";
+import CompanyProfile from "./pages/CompanyProfile";
 
 function App() {
   return (
@@ -23,7 +24,12 @@ function App() {
           }/>
         <Route path="/company/dashboard" element={
           <CompanyProtectedRoute>
-            <CompnayDashboard/>
+            <CompanyDashboard/>
+          </CompanyProtectedRoute>
+          }/>
+        <Route path="/company/profile" element={
+          <CompanyProtectedRoute>
+            <CompanyProfile/>
           </CompanyProtectedRoute>
           }/>
       </Routes>
