@@ -45,12 +45,12 @@ const existingCompany = async (email) => {
 const createJobIfNotExists = async (jobData) => {
   const alreadyActive = await prisma.jobs.findFirst({
     where: {
-      companyId:jobData.companyId,
-      jobTitle:jobData.jobTitle,
-      isActive:true
+      companyId: jobData.companyId,
+      jobTitle: jobData.jobTitle,
+      isActive: true
     }
   })
-  if(alreadyActive){
+  if (alreadyActive) {
     throw new Error('An active job with this title already exists for the company');
   }
   const newJob = await prisma.jobs.create({
@@ -61,11 +61,11 @@ const createJobIfNotExists = async (jobData) => {
       stipend: jobData.stipend,
       description: jobData.description,
       skills: {
-      connectOrCreate: jobData.skills.map(skill => ({
-        where: { skillName: skill },
-        create: { skillName: skill }
-      }))
-    }
+        connectOrCreate: jobData.skills.map(skill => ({
+          where: { skillName: skill },
+          create: { skillName: skill }
+        }))
+      }
     },
     include: { skills: true }
   })
@@ -73,4 +73,16 @@ const createJobIfNotExists = async (jobData) => {
 
 }
 
-module.exports = { createCompanyifnotExists , existingCompany,createJobIfNotExists};
+const updateCompany = async (email, updateData) => {
+  // Remove sensitive or non-updatable fields if they exist in updateData
+  const { password, email: emailField, companyId, ...dataToUpdate } = updateData;
+
+  const updatedCompany = await prisma.companies.update({
+    where: { email: email },
+    data: dataToUpdate,
+  });
+
+  return updatedCompany;
+};
+
+module.exports = { createCompanyifnotExists, existingCompany, createJobIfNotExists, updateCompany };

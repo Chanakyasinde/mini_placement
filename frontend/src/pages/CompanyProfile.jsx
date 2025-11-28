@@ -24,7 +24,7 @@ const CompanyProfile = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/api/company/dashboard`, {
+            const response = await fetch(`http://localhost:3000/company/dashboard`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -62,7 +62,21 @@ const CompanyProfile = () => {
 
     const handleSave = async () => {
         try {
-            // TODO: Implement API call to update company profile
+            const token = localStorage.getItem('companyToken');
+            const response = await fetch(`http://localhost:3000/company/profile`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tempData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update profile');
+            }
+
+            const data = await response.json();
             setFormData(tempData);
             setIsEditing(false);
             alert("Profile updated successfully!");
