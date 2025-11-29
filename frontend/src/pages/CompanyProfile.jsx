@@ -23,14 +23,13 @@ const CompanyProfile = () => {
                 setError('Please login to access profile');
                 return;
             }
-
             const response = await fetch(`http://localhost:3000/company/dashboard`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-
+            
             if (!response.ok) {
                 throw new Error('Failed to fetch company data');
             }

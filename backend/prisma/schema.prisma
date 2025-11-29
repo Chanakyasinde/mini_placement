@@ -36,7 +36,6 @@ model Admins {
   email       String   @unique
   createdAt   DateTime @default(now())
 }
-
 model jobs {
   jobId      Int        @id @default(autoincrement())
   companyId   Int
