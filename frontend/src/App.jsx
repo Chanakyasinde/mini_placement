@@ -10,31 +10,47 @@ import StudentProtectedRoute from "./components/storage/StudentProtectedRoute";
 import CompanyProtectedRoute from "./components/storage/CompanyProtectedRoute";
 import CompanyProfile from "./pages/CompanyProfile";
 
+
+import JobCard from "./pages/JobCard";
+
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginStudent />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/student/dashboard" element={
-          <StudentProtectedRoute>
-            <StudentDashboard/>
-          </StudentProtectedRoute>
-          }/>
-        <Route path="/company/dashboard" element={
-          <CompanyProtectedRoute>
-            <CompanyDashboard/>
-          </CompanyProtectedRoute>
-          }/>
-        <Route path="/company/profile" element={
-          <CompanyProtectedRoute>
-            <CompanyProfile/>
-          </CompanyProtectedRoute>
-          }/>
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<LoginStudent />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/student/dashboard" element={
+                    <StudentProtectedRoute>
+                        <StudentDashboard />
+                    </StudentProtectedRoute>
+                } />
+                <Route path="/company/dashboard" element={
+                    <CompanyProtectedRoute>
+                        <CompanyDashboard />
+                    </CompanyProtectedRoute>
+                } />
+                <Route path="/company/profile" element={
+                    <CompanyProtectedRoute>
+                        <CompanyProfile />
+                    </CompanyProtectedRoute>
+                } />
+
+                {/* New Routes for Job Management */}
+                <Route path="/dashboard/job/new" element={
+                    <CompanyProtectedRoute>
+                        <JobCard />
+                    </CompanyProtectedRoute>
+                } />
+                <Route path="/dashboard/job/:id" element={
+                    <CompanyProtectedRoute>
+                        <JobCard />
+                    </CompanyProtectedRoute>
+                } />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
+

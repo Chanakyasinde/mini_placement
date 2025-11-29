@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import ListOfJobs from './ListOfJobs';
 import '../components/styles/global.css';
 
 const CompanyDashboard = () => {
@@ -12,17 +13,22 @@ const CompanyDashboard = () => {
         fetchDashboardData();
     }, []);
 
-    const fetchDashboardData = async () => {
+    const fetchDashboardData = React.useCallback(async () => {
         try {
-            setLoading(true);
+            // Don't set loading to true on refresh to avoid flickering if already loaded once
+            // But for initial load we want it.
+            if (!companyData) setLoading(true);
+
             const token = localStorage.getItem('companyToken');
 
             if (!token) {
                 setError('Please login to access dashboard');
+                setLoading(false);
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/company/dashboard`, {
+            // 1. Fetch Company Profile
+            const profileResponse = await fetch(`http://localhost:3000/company/dashboard`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -30,26 +36,50 @@ const CompanyDashboard = () => {
                 }
             });
 
-            if (!response.ok) {
+            if (!profileResponse.ok) {
                 throw new Error('Failed to fetch dashboard data');
             }
 
-            const data = await response.json();
-            setCompanyData(data.company);
+            const profileData = await profileResponse.json();
+
+            // 2. Fetch Jobs separately
+            const jobsResponse = await fetch(`http://localhost:3000/company/dashboard/job`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            let jobs = [];
+            if (jobsResponse.ok) {
+                const jobsData = await jobsResponse.json();
+                jobs = Array.isArray(jobsData.data) ? jobsData.data : [];
+            }
+
+            if (profileData && profileData.company) {
+                setCompanyData({
+                    ...profileData.company,
+                    jobsPosted: jobs
+                });
+            } else {
+                throw new Error('Invalid company data received');
+            }
+
             setLoading(false);
         } catch (err) {
+            console.error("Dashboard Fetch Error:", err);
             setError(err.message);
             setLoading(false);
         }
-    };
+    }, []); // Empty dependency array as it doesn't depend on props or state
 
     const handleProfileClick = () => {
         navigate(`/company/profile`);
     };
 
     const handleAddJob = () => {
-        // Placeholder for add job functionality
-        alert('Add Job functionality coming soon!');
+        navigate('/dashboard/job/new');
     };
 
     if (loading) {
@@ -100,49 +130,10 @@ const CompanyDashboard = () => {
                         </button>
                     </div>
 
-                    {companyData?.jobsPosted && companyData.jobsPosted.length > 0 ? (
-                        <div style={styles.jobsList}>
-                            {companyData.jobsPosted.map((job, index) => (
-                                <div key={job.jobId || index} style={styles.jobCard}>
-                                    <div style={styles.jobInfo}>
-                                        <h3 style={styles.jobTitle}>{job.jobTitle || 'Untitled Job'}</h3>
-                                        <div style={styles.jobMeta}>
-                                            <span style={styles.jobMetaItem}>
-                                                {job.jobType || 'Full-time'}
-                                            </span>
-                                            <span style={styles.jobDivider}>•</span>
-                                            <span style={styles.jobMetaItem}>
-                                                {job.location || companyData.location}
-                                            </span>
-                                            {job.salary && (
-                                                <>
-                                                    <span style={styles.jobDivider}>•</span>
-                                                    <span style={styles.jobMetaItem}>{job.salary}</span>
-                                                </>
-                                            )}
-                                        </div>
-                                        {job.description && (
-                                            <p style={styles.jobDescription}>
-                                                {job.description.substring(0, 150)}
-                                                {job.description.length > 150 ? '...' : ''}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div style={styles.jobActions}>
-                                        <button style={styles.editButton}>Edit</button>
-                                        <button style={styles.viewButton}>View</button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div style={styles.emptyState}>
-                            <p style={styles.emptyStateText}>No active jobs posted yet</p>
-                            <p style={styles.emptyStateSubtext}>
-                                Click "Add Job" to post your first job opening
-                            </p>
-                        </div>
-                    )}
+                    <ListOfJobs
+                        jobs={companyData?.jobsPosted}
+                        onRefresh={fetchDashboardData}
+                    />
                 </div>
 
                 {/* Company Info Card */}
@@ -247,86 +238,6 @@ const styles = {
         fontWeight: '600',
         cursor: 'pointer',
         transition: 'opacity 0.2s',
-    },
-    jobsList: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-    },
-    jobCard: {
-        backgroundColor: '#1a1a1a',
-        border: '1px solid #333333',
-        borderRadius: '12px',
-        padding: '1.5rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    jobInfo: {
-        flex: 1,
-    },
-    jobTitle: {
-        fontSize: '1.25rem',
-        fontWeight: '600',
-        marginBottom: '0.5rem',
-    },
-    jobMeta: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        marginBottom: '0.75rem',
-    },
-    jobMetaItem: {
-        fontSize: '0.9rem',
-        color: '#a3a3a3',
-    },
-    jobDivider: {
-        color: '#666666',
-    },
-    jobDescription: {
-        fontSize: '0.95rem',
-        color: '#cccccc',
-        lineHeight: '1.5',
-    },
-    jobActions: {
-        display: 'flex',
-        gap: '0.5rem',
-    },
-    editButton: {
-        backgroundColor: 'transparent',
-        color: '#ffffff',
-        border: '1px solid #333333',
-        padding: '0.5rem 1rem',
-        borderRadius: '6px',
-        fontSize: '0.85rem',
-        fontWeight: '500',
-        cursor: 'pointer',
-    },
-    viewButton: {
-        backgroundColor: 'transparent',
-        color: '#ffffff',
-        border: '1px solid #333333',
-        padding: '0.5rem 1rem',
-        borderRadius: '6px',
-        fontSize: '0.85rem',
-        fontWeight: '500',
-        cursor: 'pointer',
-    },
-    emptyState: {
-        backgroundColor: '#1a1a1a',
-        border: '1px solid #333333',
-        borderRadius: '12px',
-        padding: '3rem',
-        textAlign: 'center',
-    },
-    emptyStateText: {
-        fontSize: '1.1rem',
-        color: '#ffffff',
-        marginBottom: '0.5rem',
-    },
-    emptyStateSubtext: {
-        fontSize: '0.95rem',
-        color: '#a3a3a3',
     },
     infoCard: {
         backgroundColor: '#1a1a1a',
