@@ -1,4 +1,5 @@
-const {studentInformation} = require("../services/services")
+const { get } = require("http");
+const {studentInformation,fetchJobsForStudent} = require("../services/services")
 
 const getDashboard = async (req,res) => {
     console.log("entered cotroller")
@@ -19,5 +20,18 @@ const getDashboard = async (req,res) => {
         return res.status(400).json({error:err})
     }
 }
+const getJobsForStudent = async (req, res) => {
+    const studentEmail = req.studentEmail;
 
-module.exports = { getDashboard }
+    try{
+        const studentJobs = await fetchJobsForStudent(studentEmail);
+        return res.status(200).json({
+            message:"Jobs sucesfully fetched",
+            data: studentJobs
+        });
+    }catch(err){
+        return res.status(400).json({error:err})
+    }
+}
+
+module.exports = { getDashboard,getJobsForStudent }

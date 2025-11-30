@@ -1,4 +1,4 @@
- const {PrismaClient} = require('@prisma/client');
+const {PrismaClient} = require('@prisma/client');
 const bcrypt = require('bcrypt')
 const prisma = new PrismaClient();
 const salt = 10
@@ -63,4 +63,13 @@ const studentInformation = async (studentEmail) => {
 
     return studentInfo
 }
-module.exports = {createStudentSignup,checkStudentLogin,studentInformation}
+
+const fetchJobsForStudent = async (studentEmail) => {
+    const job = await prisma.jobs.findMany({
+        where: {
+            isActive: true
+        }
+    })
+    return job
+}
+module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent}
