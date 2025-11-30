@@ -1,4 +1,4 @@
- const {PrismaClient} = require('@prisma/client');
+const {PrismaClient} = require('@prisma/client');
 const bcrypt = require('bcrypt')
 const prisma = new PrismaClient();
 const salt = 10
@@ -63,4 +63,47 @@ const studentInformation = async (studentEmail) => {
 
     return studentInfo
 }
-module.exports = {createStudentSignup,checkStudentLogin,studentInformation}
+
+const fetchJobsForStudent = async (studentEmail) => {
+    const job = await prisma.jobs.findMany({
+        where: {
+            isActive: true
+        }
+    })
+    return job
+}
+const applicationToJob = async (studentEmail, jobId) => {
+    const student = await prisma.students.findUnique({
+        where: {
+            email: studentEmail
+        }
+    });
+    if(!student){
+        throw new Error("Student not found");
+    }
+    const existingApplication = await prisma.applications.findFirst({
+        where: {
+            studentId: student.student_id,
+            jobId: jobId
+        }
+    })
+    if(existingApplication){
+        throw new Error("Already applied to the job before")
+    }
+    const applied = await prisma.applications.create({
+        data: {
+            studentId: student.student_id,
+            jobId: jobId
+        }
+    })
+    return applied
+}
+
+const studentUpdated = async (studentEmail,updateData) => {
+    const info = await prisma.students.update({
+        where:{email:studentEmail},
+        data:{...updateData}
+    })
+    return info
+}
+module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob,studentUpdated}

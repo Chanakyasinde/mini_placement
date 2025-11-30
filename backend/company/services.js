@@ -74,6 +74,7 @@ const createJobIfNotExists = async (jobData) => {
 }
 
 const updateCompany = async (email, updateData) => {
+
   const updatedCompany = await prisma.companies.update({
     where: { email: email },
     data: updateData,
