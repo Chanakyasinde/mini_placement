@@ -16,6 +16,7 @@ const JobCard = () => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [alreadyApplied, setAlreadyApplied] = useState(null);
 
     useEffect(() => {
         if (isEditMode) {
@@ -53,6 +54,22 @@ const JobCard = () => {
         }
     };
 
+    // Not working properly please check the code!
+    useEffect(() => {
+        const loader = async () => {
+            const res = await fetch('http://loalhost:3000/student/jobsApplied',{
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('studentToken')}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            const response = await res.json();
+            console.log("Jobs Applied:",response);
+            setAlreadyApplied(response.data);
+        }
+        loader()
+    },[])
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({

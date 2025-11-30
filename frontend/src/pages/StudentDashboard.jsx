@@ -25,7 +25,6 @@ const StudentDashboard = () => {
         return;
       }
 
-      // 1. Fetch Student Profile
       const profileResponse = await fetch(`http://localhost:3000/student/dashboard`, {
         method: 'GET',
         headers: {
@@ -40,7 +39,6 @@ const StudentDashboard = () => {
 
       const profileData = await profileResponse.json();
 
-      // 2. Fetch Jobs
       const jobsResponse = await fetch(`http://localhost:3000/student/dashboard/jobsStudent`, {
         method: 'GET',
         headers: {
@@ -79,9 +77,7 @@ const StudentDashboard = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          jobId: jobId
-        })
+        body: JSON.stringify({jobId})
       });
 
       const response = await res.json();
@@ -151,7 +147,7 @@ const StudentDashboard = () => {
               </div>
             ) : (
               jobs.map((job) => (
-                <div key={job.jobId || job._id} style={styles.jobCard}>
+                <div key={job.jobId} style={styles.jobCard}>
                   <div style={styles.jobInfo}>
                     <h3 style={styles.jobTitle}>{job.jobTitle || 'Untitled Job'}</h3>
                     <div style={styles.jobMeta}>
@@ -185,10 +181,10 @@ const StudentDashboard = () => {
                   </div>
                   <button
                     style={styles.applyButton}
-                    onClick={() => handleApply(job.jobId || job._id)}
-                    disabled={applying === (job.jobId || job._id)}
+                    onClick={() => handleApply(job.jobId)}
+                    disabled={applying === (job.jobId)}
                   >
-                    {applying === (job.jobId || job._id) ? 'Applying...' : 'Apply'}
+                    {applying === (job.jobId) ? 'Applying...' : 'Apply'}
                   </button>
                 </div>
               ))

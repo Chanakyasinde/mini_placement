@@ -1,4 +1,4 @@
-const { studentInformation, fetchJobsForStudent, applicationToJob, studentUpdated } = require("../services/services");
+const { studentInformation, fetchJobsForStudent, applicationToJob, studentUpdated ,fetchAppliedJobs} = require("../services/services");
 
 const getDashboard = async (req, res) => {
     console.log("entered cotroller")
@@ -56,6 +56,7 @@ const updatedProfile = async (req, res) => {
 const applyToJobs = async (req, res) => {
     const studentEmail = req.studentEmail;
     const { jobId } = req.body;
+    console.log("Applying to job:", jobId, "for student:", studentEmail);
     try {
         const applicationResult = await applicationToJob(studentEmail, jobId);
         return res.status(201).json({ message: "Applied successfully", data: applicationResult })
@@ -64,4 +65,14 @@ const applyToJobs = async (req, res) => {
     }
 }
 
-module.exports = { getDashboard, getJobsForStudent, applyToJobs, updatedProfile }
+const jobsApplied = async (req, res) => {
+    const studentEmail = req.studentEmail;
+    try {
+        const appliedJobs = await fetchAppliedJobs(studentEmail);
+        return res.status(200).json({ message: "Applied jobs fetched successfully", data: appliedJobs })
+    } catch (err) {
+        return res.status(400).json({ message: "error while fetching applied jobs", error: err })
+    }
+}
+
+module.exports = { getDashboard, getJobsForStudent, applyToJobs, updatedProfile,jobsApplied }

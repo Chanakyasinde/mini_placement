@@ -13,10 +13,13 @@ const studentSignUp = async (req, res) => {
             phoneNumber: Newstudent.phoneNumber.toString()
         };
 
-        return res.status(200).json({
-            message: "Successfully passed the controllers",
-            student: sanitizedStudent
-        });
+        const token = jwt.sign({ email: sanitizedStudent.email }, JWT_SECRET, { expiresIn: '7d' });
+
+        return res.status(201).json({ 
+            message: 'Signup successful', 
+            data: sanitizedStudent,
+            token :token
+            });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
