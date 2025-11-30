@@ -98,4 +98,12 @@ const applicationToJob = async (studentEmail, jobId) => {
     })
     return applied
 }
-module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob}
+
+const studentUpdated = async (studentEmail,updateData) => {
+    const info = await prisma.students.update({
+        where:{email:studentEmail},
+        data:{...updateData}
+    })
+    return info
+}
+module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob,studentUpdated}
