@@ -52,13 +52,18 @@ export default function Login() {
       });
 
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || data.error || "Login failed");
+      }
+
       localStorage.setItem(`${selected}Token`, data.token);
       navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
       console.log("Login Response:", data);
-      
+
     } catch (error) {
       console.error("Login Error:", error);
-      alert("An error occurred during login. Please try again.");
+      alert(error.message || "An error occurred during login. Please try again.");
     }
   };
 
@@ -120,7 +125,7 @@ export default function Login() {
                   type={
                     key === "password"
                       ? "password"
-                        : "email"
+                      : "email"
                   }
 
                   name={key}
