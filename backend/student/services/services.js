@@ -72,4 +72,30 @@ const fetchJobsForStudent = async (studentEmail) => {
     })
     return job
 }
-module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent}
+const applicationToJob = async (studentEmail, jobId) => {
+    const student = await prisma.students.findUnique({
+        where: {
+            email: studentEmail
+        }
+    });
+    if(!student){
+        throw new Error("Student not found");
+    }
+    const existingApplication = await prisma.applications.findFirst({
+        where: {
+            studentId: student.student_id,
+            jobId: jobId
+        }
+    })
+    if(existingApplication){
+        throw new Error("Already applied to the job before")
+    }
+    const applied = await prisma.applications.create({
+        data: {
+            studentId: student.student_id,
+            jobId: jobId
+        }
+    })
+    return applied
+}
+module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob}
