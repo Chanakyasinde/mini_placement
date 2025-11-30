@@ -1,5 +1,4 @@
 import React,{useEffect,useState} from 'react'
-import { use } from 'react'
 
 export default function StudentDashboard(){
   const [info,setInfo] = useState([])
@@ -27,11 +26,26 @@ export default function StudentDashboard(){
     }
     getData()
   },[])
+  const handleClick = async () => {
+    const token = localStorage.getItem("studentToken")
+    const res = await fetch('http://localhost:3000/student/apply',{
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body : JSON.stringify({
+        jobId: 2
+      })
+    })
+    const response = await res.json()
+    console.log("handleClick",response)
+  }
   return (
     <>
     <div>
       student dadsdasbdhsbnds
-      <div></div>
+      <div onClick={handleClick}>click chey babai</div>
     </div>
     </>
 

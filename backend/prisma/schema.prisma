@@ -15,6 +15,8 @@ model Students {
   email            String   @unique
   college          String   @default("Unknown")
   resume_link      String
+  Applications    Applications[]
+  createdAt        DateTime @default(now())
 }
 
 model companies {
@@ -39,16 +41,27 @@ model Admins {
 model jobs {
   jobId      Int        @id @default(autoincrement())
   companyId   Int
-  company     companies  @relation(fields: [companyId], references: [companyId])
   jobTitle   String
   isActive    Boolean    @default(true)
   stipend     String?
   description String?
   createdAt   DateTime   @default(now())
   skills      skills[]   @relation("JobSkills")
+  company     companies  @relation(fields: [companyId], references: [companyId])
+  Applications Applications[]
 }
 model skills{
   skillId   Int @id @default(autoincrement())
   skillName String @unique
   jobs  jobs[]   @relation("JobSkills")
+}
+model Applications {
+  applicationId Int      @id @default(autoincrement())
+  studentId     Int
+  jobId         Int
+  appliedAt     DateTime @default(now())
+  status        String   @default("Applied")
+  student       Students @relation(fields: [studentId] , references:[student_id])
+  job           jobs     @relation(fields: [jobId], references:[jobId])
+  @@unique([studentId, jobId])
 }
