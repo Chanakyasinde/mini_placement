@@ -73,7 +73,7 @@ const fetchJobsForStudent = async (studentEmail) => {
     return job
 }
 const applicationToJob = async (studentEmail, jobId) => {
-    const student = await prisma.students.findUnique({
+    const student = await prisma.students.findFirst({
         where: {
             email: studentEmail
         }
@@ -106,4 +106,13 @@ const studentUpdated = async (studentEmail,updateData) => {
     })
     return info
 }
-module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob,studentUpdated}
+
+const fetchAppliedJobs = async (studentEmail) => {
+    const appliedStudents = await prisma.applications.findMany({
+        where: {
+            email: studentEmail
+        }
+    })
+    return appliedStudents
+}
+module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob,studentUpdated,fetchAppliedJobs}

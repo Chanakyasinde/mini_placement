@@ -51,8 +51,8 @@ export default function Signup() {
     });
 
     const data = await res.json();
-    if(res.status===200){
-      localStorage.setItem(`${selected}auth`, "true");
+    if(res.status == 201){
+      localStorage.setItem(`${selected}Token`, data.token);
       navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
     }
     console.log("Response from server:", data);
