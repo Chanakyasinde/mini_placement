@@ -17,6 +17,18 @@ export default function Login() {
     email: "",
     password: "",
   });
+  useEffect(()=>{
+    const tokenStudent = localStorage.getItem("studentToken");
+    console.log("Token Student:", tokenStudent);
+    const tokenCompany = localStorage.getItem("companyToken");
+    if(tokenCompany){
+      navigate('/company/dashboard')
+    }
+    if(tokenStudent){
+      navigate('/student/dashboard')
+    }
+    
+  },[])
 
   useEffect(() => {
     const resizeHandler = () => setIsMobile(window.innerWidth < 768);

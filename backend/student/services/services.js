@@ -108,11 +108,21 @@ const studentUpdated = async (studentEmail,updateData) => {
 }
 
 const fetchAppliedJobs = async (studentEmail) => {
-    const appliedStudents = await prisma.applications.findMany({
+    console.log("Entered fetch applied jobs service",studentEmail)
+    const appliedStudents = await prisma.students.findFirst({
         where: {
             email: studentEmail
         }
     })
-    return appliedStudents
+    const application = await prisma.applications.findMany({
+        where: {
+            studentId: appliedStudents.student_id
+        },
+        select: {
+            jobId: true
+        }
+    })
+    console.log("Applied jobs fetched:", application)
+    return application
 }
 module.exports = {createStudentSignup,checkStudentLogin,studentInformation,fetchJobsForStudent,applicationToJob,studentUpdated,fetchAppliedJobs}

@@ -25,6 +25,18 @@ export default function Signup() {
     industry: "",
     location: "",
   });
+    useEffect(()=>{
+      const tokenStudent = localStorage.getItem("studentToken");
+      const tokenCompany = localStorage.getItem("companyToken");
+      if(tokenCompany){
+        navigate('/company/dashboard')
+      }
+      if(tokenStudent){
+        navigate('/student/dashboard')
+      }
+      
+    },[])
+  
 
   useEffect(() => {
     const resizeHandler = () => setIsMobile(window.innerWidth < 768);
