@@ -6,9 +6,10 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const [studentData, setStudentData] = useState(null);
   const [jobs, setJobs] = useState([]);
+  const [alreadyApplied, setAlreadyApplied] = useState([]); // ⬅ NEW
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [applying, setApplying] = useState(null); // Track which job is being applied to
+  const [applying, setApplying] = useState(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -18,40 +19,34 @@ const StudentDashboard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('studentToken');
-
       if (!token) {
         setError('Please login to access dashboard');
         setLoading(false);
         return;
       }
 
+      // Fetch student profile
       const profileResponse = await fetch(`http://localhost:3000/student/dashboard`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
-
-      if (!profileResponse.ok) {
-        throw new Error('Failed to fetch dashboard data');
-      }
-
       const profileData = await profileResponse.json();
 
+      // Fetch available jobs
       const jobsResponse = await fetch(`http://localhost:3000/student/dashboard/jobsStudent`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
+      const jobsData = await jobsResponse.json();
+      const jobsList = Array.isArray(jobsData.data) ? jobsData.data : [];
 
-      let jobsList = [];
-      if (jobsResponse.ok) {
-        const jobsData = await jobsResponse.json();
-        jobsList = Array.isArray(jobsData.data) ? jobsData.data : [];
-      }
+      // Fetch applied jobs (NEW)
+      const appliedRes = await fetch(`http://localhost:3000/student/jobsApplied`, {
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+      });
+      const appliedData = await appliedRes.json();
+      setAlreadyApplied(appliedData.data || []); // → [{ jobId }, { jobId }]
 
       setStudentData(profileData.data);
       setJobs(jobsList);
@@ -63,27 +58,30 @@ const StudentDashboard = () => {
     }
   };
 
-  const handleProfileClick = () => {
-    navigate(`/student/profile`);
-  };
+  const hasAlreadyApplied = (jobId) => alreadyApplied.some(a => a.jobId === jobId);
+
+  const handleProfileClick = () => navigate(`/student/profile`);
 
   const handleApply = async (jobId) => {
+    if (hasAlreadyApplied(jobId)) {
+      alert("You already applied to this job.");
+      return;
+    }
+
     try {
       setApplying(jobId);
       const token = localStorage.getItem('studentToken');
+
       const res = await fetch('http://localhost:3000/student/apply', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({jobId})
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId })
       });
 
       const response = await res.json();
-
       if (res.ok) {
-        alert('Applied successfully!');
+        alert("Applied successfully!");
+        setAlreadyApplied(prev => [...prev, { jobId }]); // instant UI update
       } else {
         alert(response.message || 'Failed to apply');
       }
@@ -107,34 +105,29 @@ const StudentDashboard = () => {
     return (
       <div style={styles.errorContainer}>
         <div style={styles.errorText}>{error}</div>
-        <button style={styles.retryButton} onClick={fetchDashboardData}>
-          Retry
-        </button>
+        <button style={styles.retryButton} onClick={fetchDashboardData}>Retry</button>
       </div>
     );
   }
 
   return (
     <div style={styles.container}>
-      {/* Header with Profile Button */}
+      {/* Header */}
       <div style={styles.header}>
         <div style={styles.logo}>PlacementHub</div>
-        <button style={styles.profileButton} onClick={handleProfileClick}>
-          Student Profile
-        </button>
+        <button style={styles.profileButton} onClick={handleProfileClick}>Student Profile</button>
       </div>
 
-      {/* Welcome Section */}
+      {/* Welcome */}
       <div style={styles.welcomeSection}>
         <h1 style={styles.welcomeTitle}>Welcome, {studentData?.studentName}!</h1>
-        <p style={styles.welcomeSubtitle}>
-          Find and apply to your dream jobs
-        </p>
+        <p style={styles.welcomeSubtitle}>Find and apply to your dream jobs</p>
       </div>
 
-      {/* Dashboard Content */}
+      {/* Main Content */}
       <div style={styles.content}>
-        {/* Active Jobs Section */}
+
+        {/* Jobs List */}
         <div style={styles.jobsSection}>
           <div style={styles.sectionHeader}>
             <h2 style={styles.sectionTitle}>Available Jobs</h2>
@@ -146,18 +139,15 @@ const StudentDashboard = () => {
                 <p style={styles.emptyStateText}>No jobs available at the moment</p>
               </div>
             ) : (
-              jobs.map((job) => (
+              jobs.map(job => (
                 <div key={job.jobId} style={styles.jobCard}>
                   <div style={styles.jobInfo}>
                     <h3 style={styles.jobTitle}>{job.jobTitle || 'Untitled Job'}</h3>
+
                     <div style={styles.jobMeta}>
-                      <span style={styles.jobMetaItem}>
-                        {job.companyName || 'Company'}
-                      </span>
+                      <span style={styles.jobMetaItem}>{job.companyName || 'Company'}</span>
                       <span style={styles.jobDivider}>•</span>
-                      <span style={styles.jobMetaItem}>
-                        {job.location || 'Remote'}
-                      </span>
+                      <span style={styles.jobMetaItem}>{job.location || 'Remote'}</span>
                       {job.stipend && (
                         <>
                           <span style={styles.jobDivider}>•</span>
@@ -165,12 +155,14 @@ const StudentDashboard = () => {
                         </>
                       )}
                     </div>
+
                     {job.description && (
                       <p style={styles.jobDescription}>
                         {job.description.substring(0, 150)}
                         {job.description.length > 150 ? '...' : ''}
                       </p>
                     )}
+
                     {job.Skills && job.Skills.length > 0 && (
                       <div style={styles.skillsContainer}>
                         {job.Skills.map((skill, idx) => (
@@ -179,12 +171,23 @@ const StudentDashboard = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* 🔥 Updated Apply Button */}
                   <button
-                    style={styles.applyButton}
+                    style={{
+                      ...styles.applyButton,
+                      backgroundColor: hasAlreadyApplied(job.jobId) ? '#555555' : '#ffffff',
+                      color: hasAlreadyApplied(job.jobId) ? '#cccccc' : '#000000',
+                      cursor: hasAlreadyApplied(job.jobId) ? 'not-allowed' : 'pointer'
+                    }}
                     onClick={() => handleApply(job.jobId)}
-                    disabled={applying === (job.jobId)}
+                    disabled={hasAlreadyApplied(job.jobId) || applying === job.jobId}
                   >
-                    {applying === (job.jobId) ? 'Applying...' : 'Apply'}
+                    {hasAlreadyApplied(job.jobId)
+                      ? "Applied"
+                      : applying === job.jobId
+                      ? "Applying..."
+                      : "Apply"}
                   </button>
                 </div>
               ))
@@ -192,32 +195,23 @@ const StudentDashboard = () => {
           </div>
         </div>
 
-        {/* Student Info Card */}
+        {/* Profile Card */}
         <div style={styles.infoCard}>
           <h3 style={styles.infoTitle}>Your Profile</h3>
           <div style={styles.infoGrid}>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Email</span>
-              <span style={styles.infoValue}>{studentData?.email || 'N/A'}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>Phone</span>
-              <span style={styles.infoValue}>{studentData?.phoneNumber || 'N/A'}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>College</span>
-              <span style={styles.infoValue}>{studentData?.collegeName || 'N/A'}</span>
-            </div>
-            <div style={styles.infoItem}>
-              <span style={styles.infoLabel}>CGPA</span>
-              <span style={styles.infoValue}>{studentData?.cgpa || 'N/A'}</span>
-            </div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>Email</span><span style={styles.infoValue}>{studentData?.email}</span></div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>Phone</span><span style={styles.infoValue}>{studentData?.phoneNumber}</span></div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>College</span><span style={styles.infoValue}>{studentData?.collegeName}</span></div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>CGPA</span><span style={styles.infoValue}>{studentData?.cgpa}</span></div>
           </div>
         </div>
+
       </div>
     </div>
   );
 };
+
+// (Your same styles object unchanged)
 
 const styles = {
   container: {
