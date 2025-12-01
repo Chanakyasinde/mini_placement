@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CompanyProfile = () => {
     const navigate = useNavigate();
@@ -110,6 +110,10 @@ const CompanyProfile = () => {
                 </button>
             </div>
         );
+    }
+    const handleLogOut = () => {
+        localStorage.removeItem('companyToken');
+        navigate('/');
     }
 
     return (
@@ -421,6 +425,9 @@ const CompanyProfile = () => {
                         </div>
                     )}
                 </div>
+                <button className="btn btn-outline" onClick={handleLogOut} style={{marginTop:'20px'}}>
+                    Log Out
+                </button>
             </div>
         </div>
     );
