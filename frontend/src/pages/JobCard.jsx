@@ -133,7 +133,7 @@ const JobCard = () => {
                             value={formData.stipend}
                             onChange={handleChange}
                             style={styles.input}
-                            placeholder="e.g. $5000/month"
+                            placeholder="e.g. ₹50000/month"
                         />
                     </div>
 
