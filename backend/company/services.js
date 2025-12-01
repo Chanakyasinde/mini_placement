@@ -83,4 +83,37 @@ const updateCompany = async (email, updateData) => {
   return updatedCompany;
 };
 
-module.exports = { createCompanyifnotExists, existingCompany, createJobIfNotExists, updateCompany };
+const getStudentJobsData = async (companyEmail,jobId) => {
+  console.log("Inside get student jobs data function");
+  const companyHere = await prisma.companies.findFirst({
+    where: {email: companyEmail}
+  })
+  const jobIdNumber = Number(jobId);
+  console.log("Company details fetched:",companyHere,jobId);
+const student = await prisma.jobs.findFirst({
+  where: {
+    companyId: companyHere.companyId,
+    jobId: jobIdNumber
+  },
+  include: {
+    Applications: {
+      include: {
+        student: {
+          select: {
+            student_id: true,
+            studentName: true,
+            email: true,
+            phoneNumber: true,
+            college: true,
+            resume_link: true
+          }
+        }
+      }
+    }
+  }
+});
+
+  console.log("Students applied data:",student);
+  return student
+}
+module.exports = { createCompanyifnotExists, existingCompany, createJobIfNotExists, updateCompany,getStudentJobsData };

@@ -2,7 +2,8 @@ const express = require("express");
 const { postCompany, companylogin, companydashboard, updateCompanyProfile } = require("./controller.js");
 const { authMiddleware } = require("./middleware/authentication.js");
 const { verifyCompanydetails } = require("./middleware/middleware.js");
-const { createJobs, getJobs,updateJob,deleteJob ,getJobById} = require('./controllers/handleJobs.js');
+const { createJobs, getJobs,updateJob,deleteJob ,getJobById,getNumberOfStudentsApplied} = require('./controllers/handleJobs.js');
+const router = require("../student/routes/catalog.js");
 
 const router1 = express.Router();
 
@@ -14,5 +15,5 @@ router1.get("/dashboard/job", authMiddleware, getJobs);
 router1.put("/dashboard/job/:id", authMiddleware,updateJob);
 router1.delete("/dashboard/job/:id", authMiddleware,deleteJob);
 router1.get("/dashboard/job/:id", authMiddleware, getJobById);
-router1.put("/profile", authMiddleware, updateCompanyProfile);
-module.exports = router1; 
+router1.get("/jobs/appliedStudents", authMiddleware,getNumberOfStudentsApplied );
+module.exports = router1;

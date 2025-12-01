@@ -14,6 +14,32 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
         e.stopPropagation();
         navigate(`/dashboard/job/${jobId}`);
     };
+    const handleStudents = async (e, jobId) => {
+        e.stopPropagation();
+        try{
+            const token = localStorage.getItem('companyToken');
+            const res = await fetch(`http://localhost:3000/company/jobs/appliedStudents?jobId=${jobId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'content-Type': 'application/json'
+                },
+            })
+            const data = await res.json();
+            if(data.data == []){
+                alert('No students have applied yet');
+            }
+            console.log("frontend render",data);
+            if(res.ok){
+                alert(`Number of students applied: ${data.count}`);
+            }else{
+                alert('Could not fetch the data');
+            }
+        }catch(err){
+            console.error('Error fetching students:', err);
+            alert('Error fetching students');
+        }
+    };
 
     const handleDelete = async (e, jobId) => {
         e.stopPropagation();
@@ -27,9 +53,10 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
                     'Authorization': `Bearer ${token}`
                 }
             });
+            console.log("Delete response:", response);
 
             if (response.ok) {
-                onRefresh(); // Refresh the list in parent
+                onRefresh();
             } else {
                 alert('Failed to delete job');
             }
@@ -113,9 +140,15 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
                                 </button>
                                 <button
                                     style={{ ...styles.menuItem, color: '#ef4444' }}
-                                    onClick={(e) => handleDelete(e, job.jobId || job._id)}
+                                    onClick={(e) => handleDelete(e, job.jobId)}
                                 >
                                     Delete
+                                </button>
+                                <button
+                                    style={{ ...styles.menuItem, color: '#ef4444' }}
+                                    onClick={(e) => handleStudents(e, job.jobId)}
+                                >
+                                    see the ppl
                                 </button>
                             </div>
                         )}
