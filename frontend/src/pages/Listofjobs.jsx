@@ -107,7 +107,7 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
                             <div style={styles.menuDropdown}>
                                 <button
                                     style={styles.menuItem}
-                                    onClick={(e) => handleEdit(e, job.jobId || job._id)}
+                                    onClick={(e) => handleEdit(e, job.jobId)}
                                 >
                                     Update
                                 </button>

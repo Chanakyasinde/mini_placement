@@ -102,6 +102,10 @@ const StudentProfile = () => {
             </div>
         );
     }
+    const handleLogout = () => {
+        localStorage.removeItem('studentToken');
+        navigate('/login');
+    };
 
     return (
         <div className="profile-container">
@@ -396,6 +400,11 @@ const StudentProfile = () => {
                             <div className="form-value">{formData.yearOfPassing || 'N/A'}</div>
                         )}
                     </div>
+                </div>
+                <div>
+                <button className="btn btn-primary" onClick={handleLogout}>
+                    Logout
+                </button>
                 </div>
             </div>
         </div>

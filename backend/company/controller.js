@@ -8,10 +8,10 @@ const postCompany = async (req, res) => {
   const companyData = req.body;
   try {
     const newCompany = await createCompanyifnotExists(companyData);
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({message:"signup successful",data:newCompany,token:token});
+    const token = jwt.sign({ email:newCompany.email }, JWT_SECRET, { expiresIn: '7d' });
+    return res.status(201).json({message:"signup successful",data:newCompany,token:token});
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 }
 
