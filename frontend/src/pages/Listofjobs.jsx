@@ -14,31 +14,10 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
         e.stopPropagation();
         navigate(`/dashboard/job/${jobId}`);
     };
-    const handleStudents = async (e, jobId) => {
+    const handleStudents = (e, jobId) => {
         e.stopPropagation();
-        try{
-            const token = localStorage.getItem('companyToken');
-            const res = await fetch(`http://localhost:3000/company/jobs/appliedStudents?jobId=${jobId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'content-Type': 'application/json'
-                },
-            })
-            const data = await res.json();
-            if(data.data == []){
-                alert('No students have applied yet');
-            }
-            console.log("frontend render",data);
-            if(res.ok){
-                alert(`Number of students applied: ${data.count}`);
-            }else{
-                alert('Could not fetch the data');
-            }
-        }catch(err){
-            console.error('Error fetching students:', err);
-            alert('Error fetching students');
-        }
+        navigate(`/dashboard/job/${jobId}/applicants`);
+        setActiveMenuId(null);
     };
 
     const handleDelete = async (e, jobId) => {
@@ -133,22 +112,22 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
                         {activeMenuId === (job.jobId || job._id) && (
                             <div style={styles.menuDropdown}>
                                 <button
-                                    style={styles.menuItem}
+                                    style={{ ...styles.menuItem, borderBottom: '1px solid #aeababff' }}
                                     onClick={(e) => handleEdit(e, job.jobId)}
                                 >
                                     Update
+                                </button>
+                                <button
+                                    style={{ ...styles.menuItem, borderBottom: '1px solid #aeababff' }}
+                                    onClick={(e) => handleStudents(e, job.jobId)}
+                                >
+                                    View applicants
                                 </button>
                                 <button
                                     style={{ ...styles.menuItem, color: '#ef4444' }}
                                     onClick={(e) => handleDelete(e, job.jobId)}
                                 >
                                     Delete
-                                </button>
-                                <button
-                                    style={{ ...styles.menuItem, color: '#ef4444' }}
-                                    onClick={(e) => handleStudents(e, job.jobId)}
-                                >
-                                    see the ppl
                                 </button>
                             </div>
                         )}

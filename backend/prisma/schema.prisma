@@ -44,7 +44,7 @@ model jobs {
   jobTitle   String
   isActive    Boolean    @default(true)
   stipend     String?
-  description String?
+  description String?    @db.LongText
   createdAt   DateTime   @default(now())
   skills      skills[]   @relation("JobSkills")
   company     companies  @relation(fields: [companyId], references: [companyId])

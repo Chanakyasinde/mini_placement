@@ -13,6 +13,8 @@ import CompanyProfile from "./pages/CompanyProfile";
 
 
 import JobCard from "./pages/JobCard";
+import JobApplicants from "./pages/JobApplicants";
+import JobDetails from "./pages/JobDetails";
 
 function App() {
     return (
@@ -29,6 +31,11 @@ function App() {
                 <Route path="/student/profile" element={
                     <StudentProtectedRoute>
                         <StudentProfile />
+                    </StudentProtectedRoute>
+                } />
+                <Route path="/student/job/:jobId" element={
+                    <StudentProtectedRoute>
+                        <JobDetails />
                     </StudentProtectedRoute>
                 } />
                 <Route path="/company/dashboard" element={
@@ -51,6 +58,11 @@ function App() {
                 <Route path="/dashboard/job/:id" element={
                     <CompanyProtectedRoute>
                         <JobCard />
+                    </CompanyProtectedRoute>
+                } />
+                <Route path="/dashboard/job/:jobId/applicants" element={
+                    <CompanyProtectedRoute>
+                        <JobApplicants />
                     </CompanyProtectedRoute>
                 } />
             </Routes>

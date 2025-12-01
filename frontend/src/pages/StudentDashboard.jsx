@@ -141,7 +141,10 @@ const StudentDashboard = () => {
             ) : (
               jobs.map(job => (
                 <div key={job.jobId} style={styles.jobCard}>
-                  <div style={styles.jobInfo}>
+                  <div
+                    style={{ ...styles.jobInfo, cursor: 'pointer' }}
+                    onClick={() => navigate(`/student/job/${job.jobId}`)}
+                  >
                     <h3 style={styles.jobTitle}>{job.jobTitle || 'Untitled Job'}</h3>
 
                     <div style={styles.jobMeta}>
@@ -180,14 +183,17 @@ const StudentDashboard = () => {
                       color: hasAlreadyApplied(job.jobId) ? '#cccccc' : '#000000',
                       cursor: hasAlreadyApplied(job.jobId) ? 'not-allowed' : 'pointer'
                     }}
-                    onClick={() => handleApply(job.jobId)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleApply(job.jobId);
+                    }}
                     disabled={hasAlreadyApplied(job.jobId) || applying === job.jobId}
                   >
                     {hasAlreadyApplied(job.jobId)
                       ? "Applied"
                       : applying === job.jobId
-                      ? "Applying..."
-                      : "Apply"}
+                        ? "Applying..."
+                        : "Apply"}
                   </button>
                 </div>
               ))

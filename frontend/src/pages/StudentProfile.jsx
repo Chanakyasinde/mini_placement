@@ -401,11 +401,9 @@ const StudentProfile = () => {
                         )}
                     </div>
                 </div>
-                <div>
-                <button className="btn btn-primary" onClick={handleLogout}>
-                    Logout
+                <button className="btn btn-outline" onClick={handleLogout} style={{ marginTop: '20px' }}>
+                    Log Out
                 </button>
-                </div>
             </div>
         </div>
     );

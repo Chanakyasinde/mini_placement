@@ -7,6 +7,7 @@ const createCompanyifnotExists = async (companyData) => {
   const alreadyExists = await prisma.companies.findFirst({
     where: { OR: [{ email }, { companyName }] }
   });
+  console.log("Company already exists:", alreadyExists);
 
 
   if (alreadyExists) {
