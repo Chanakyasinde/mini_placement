@@ -3,7 +3,6 @@ const { postCompany, companylogin, companydashboard, updateCompanyProfile } = re
 const { authMiddleware } = require("./middleware/authentication.js");
 const { verifyCompanydetails } = require("./middleware/middleware.js");
 const { createJobs, getJobs,updateJob,deleteJob ,getJobById} = require('./controllers/handleJobs.js');
-const { get } = require("http");
 
 const router1 = express.Router();
 

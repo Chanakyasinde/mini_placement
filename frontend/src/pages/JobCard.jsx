@@ -5,7 +5,7 @@ import '../components/styles/global.css';
 const JobCard = () => {
     const navigate = useNavigate();
     const { id } = useParams(); // If id exists, we are in edit mode
-    const isEditMode = !!id && id !== 'new';
+    const isEditMode = Boolean(id);
 
     const [formData, setFormData] = useState({
         jobTitle: '',
@@ -28,6 +28,7 @@ const JobCard = () => {
             setLoading(true);
             const token = localStorage.getItem('companyToken');
             const response = await fetch(`http://localhost:3000/company/dashboard/job/${id}`, {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -36,14 +37,13 @@ const JobCard = () => {
             if (!response.ok) throw new Error('Failed to fetch job details');
 
             const data = await response.json();
-            // Assuming data is the job object or data.job
-            const job = data.job || data;
+            const job = data.data;
 
             setFormData({
-                jobTitle: job.jobTitle || '',
-                stipend: job.stipend || '',
-                description: job.description || '',
-                skills: job.Skills ? job.Skills.join(', ') : '',
+                jobTitle: job.jobTitle,
+                stipend: job.stipend,
+                description: job.description,
+                skills: job.skills ? job.skills.map(s => s.skillName).join(", ") : "",
                 isActive: job.isActive ?? true
             });
         } catch (err) {
@@ -68,41 +68,31 @@ const JobCard = () => {
 
         try {
             const token = localStorage.getItem('companyToken');
-            const url = isEditMode
-                ? `http://localhost:3000/company/dashboard/job/${id}`
-                : `http://localhost:3000/company/dashboard/job`;
+            const url = isEditMode?
+            `http://localhost:3000/company/dashboard/job/${id}`:
+            `http://localhost:3000/company/dashboard/job`;
 
-            const method = isEditMode ? 'PUT' : 'POST';
+            const method = isEditMode ? 'PUT': 'POST';
 
             // Process skills from string to array
             const payload = {
                 ...formData,
                 skills: formData.skills.split(',').map(s => s.trim()).filter(s => s)
             };
+            console.log("Submitting Payload:", payload);
 
             const response = await fetch(url, {
                 method: method,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                    
                 },
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                // Handle non-JSON responses (like 404 HTML pages)
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.indexOf("application/json") !== -1) {
-                    const errData = await response.json();
-                    throw new Error(errData.message || 'Failed to save job');
-                } else {
-                    const text = await response.text();
-                    console.error('API Error Response:', text);
-                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                }
-            }
+            if (!response.ok) throw new Error('Failed to update the job details');
 
-            // Navigate back to dashboard on success
             navigate('/company/dashboard');
         } catch (err) {
             setError(err.message);
