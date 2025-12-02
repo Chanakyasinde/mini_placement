@@ -7,36 +7,38 @@ export default function Signup() {
   const [selected, setSelected] = useState("student");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  const [studentForm, setStudentForm] = useState({
-    studentName: "",
-    password: "",
-    phoneNumber:"",
-    email: "",
-    college: "",
-    resume_link:"",
-  });
+const [studentForm, setStudentForm] = useState({
+  studentName: "",
+  email: "",
+  password: "",
+  phoneNumber: "",
+  college: "",
+  cgpa: "",
+  yearOfPassing: "",
+  resume_link: "",
+});
 
   const [companyForm, setCompanyForm] = useState({
     companyName: "",
     email: "",
     password: "",
     websiteUrl: "",
-    companyType:"",
+    companyType: "",
     industry: "",
     location: "",
   });
-    useEffect(()=>{
-      const tokenStudent = localStorage.getItem("studentToken");
-      const tokenCompany = localStorage.getItem("companyToken");
-      if(tokenCompany){
-        navigate('/company/dashboard')
-      }
-      if(tokenStudent){
-        navigate('/student/dashboard')
-      }
-      
-    },[])
-  
+  useEffect(() => {
+    const tokenStudent = localStorage.getItem("studentToken");
+    const tokenCompany = localStorage.getItem("companyToken");
+    if (tokenCompany) {
+      navigate('/company/dashboard')
+    }
+    if (tokenStudent) {
+      navigate('/student/dashboard')
+    }
+
+  }, [])
+
 
   useEffect(() => {
     const resizeHandler = () => setIsMobile(window.innerWidth < 768);
@@ -55,23 +57,24 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = selected === "student" ? "/student/signup" : "/company/signup";
+    console.log(formState)
     try {
-    const res = await fetch(`http://localhost:3000${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formState),
-    });
+      const res = await fetch(`http://localhost:3000${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
 
-    const data = await res.json();
-    if(res.status == 201){
-      localStorage.setItem(`${selected}Token`, data.token);
-      navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
+      const data = await res.json();
+      if (res.status == 201) {
+        localStorage.setItem(`${selected}Token`, data.token);
+        navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
+      }
+      console.log("Response from server:", data);
+
+    } catch (error) {
+      console.error("Error sending request:", error);
     }
-    console.log("Response from server:", data);
-
-  } catch (error) {
-    console.error("Error sending request:", error);
-  }
     console.log("Submitting:", selected, formState);
   };
 
@@ -85,9 +88,9 @@ export default function Signup() {
 
         {/* Student Selecting Options */}
         <div
-          style={{ 
-            ...styles.roleCard, 
-            ...(selected === "student" ? styles.activeCard : styles.inactiveCard) 
+          style={{
+            ...styles.roleCard,
+            ...(selected === "student" ? styles.activeCard : styles.inactiveCard)
           }}
           onClick={() => setSelected("student")}
         >
@@ -100,9 +103,9 @@ export default function Signup() {
 
         {/* Company Selector */}
         <div
-          style={{ 
-            ...styles.roleCard, 
-            ...(selected === "company" ? styles.activeCard : styles.inactiveCard) 
+          style={{
+            ...styles.roleCard,
+            ...(selected === "company" ? styles.activeCard : styles.inactiveCard)
           }}
           onClick={() => setSelected("company")}
         >
@@ -126,7 +129,9 @@ export default function Signup() {
           <form onSubmit={handleSubmit}>
             {Object.entries(formState).map(([key, value]) => (
               <div key={key} style={styles.inputGroup}>
-                <label style={styles.label}>{key.replace(/([A-Z])/g, " $1")}</label>
+                <label style={{ ...styles.label, textTransform: "uppercase" }}>
+                  {key.replace(/([A-Z])/g, " $1")}
+                </label>
                 <input
                   type={key.includes("password") ? "password" : "text"}
                   name={key}
@@ -149,7 +154,7 @@ export default function Signup() {
 
 
 const styles = {
-  page: { backgroundColor: "#000", minHeight: "100vh", color: "#fff", display: "flex" },
+  page: { backgroundColor: "#000", minHeight: "100vh", color: "#fff", display: "flex", fontFamily: "'Inter', sans-serif" },
 
   leftPane: {
     padding: 48,
@@ -157,6 +162,7 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     height: "100vh",
+    backgroundColor: "#000000",
   },
 
   heading: {
@@ -185,14 +191,15 @@ const styles = {
   },
 
   inactiveCard: {
-    backgroundColor: "#1f2937",
-    border: "2px solid #4b5563"
+    backgroundColor: "#1a1a1a",
+    border: "2px solid #333333"
   },
 
   roleContent: {
     display: "flex",
     alignItems: "center",
-    fontWeight: 700 },
+    fontWeight: 700
+  },
 
   icon: {
     marginRight: 12
@@ -212,15 +219,16 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     padding: 48,
-    backgroundColor: "#1f2937",
+    backgroundColor: "#0a0a0a",
   },
 
   formContainer: {
     width: "90%",
     maxWidth: 600,
-    backgroundColor: "#111827",
+    backgroundColor: "#121212",
     padding: 40,
     borderRadius: 20,
+    border: "1px solid #333333",
   },
 
   formHeading: {
@@ -238,16 +246,17 @@ const styles = {
     marginBottom: 6,
     display: "block",
     fontWeight: 500,
-    color: "#e5e7eb"
+    color: "#a3a3a3"
   },
 
   input: {
     width: "100%",
     padding: 10,
     borderRadius: 8,
-    backgroundColor: "#374151",
+    backgroundColor: "#262626",
     color: "#fff",
-    border: "1px solid #4b5563",
+    border: "1px solid #404040",
+    outline: "none",
   },
 
   button: {

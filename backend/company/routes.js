@@ -3,8 +3,7 @@ const { postCompany, companylogin, companydashboard, updateCompanyProfile } = re
 const { authMiddleware } = require("./middleware/authentication.js");
 const { verifyCompanydetails } = require("./middleware/middleware.js");
 const { createJobs, getJobs, updateJob, deleteJob, getJobById, getNumberOfStudentsApplied, updateApplicationStatus } = require('./controllers/handleJobs.js');
-const router = require("../student/routes/catalog.js");
-
+const { getAllCompanies } = require("./services.js");
 const router1 = express.Router();
 
 router1.post("/signup", verifyCompanydetails, postCompany);
@@ -21,4 +20,5 @@ router1.put("/jobs/application/:applicationId/status", authMiddleware, updateApp
 router1.get("/verify", authMiddleware, (req, res) => {
   res.status(200).json({ valid: true });
 });
+router1.get('/getAllCompanies',getAllCompanies)
 module.exports = router1;

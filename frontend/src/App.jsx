@@ -16,12 +16,16 @@ import JobCard from "./pages/JobCard";
 import JobApplicants from "./pages/JobApplicants";
 import JobDetails from "./pages/JobDetails";
 import AppliedJobs from "./pages/AppliedJobs";
+import TotalJobs from "./pages/TotalJobs";
+import TotalCompanies from "./pages/TotalCompanies";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/total-jobs" element={<TotalJobs />} />
+                <Route path="/total-companies" element={<TotalCompanies />} />
                 <Route path="/login" element={<LoginStudent />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/student/dashboard" element={

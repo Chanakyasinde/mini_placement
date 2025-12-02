@@ -52,6 +52,7 @@ const companydashboard = async (req, res) => {
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
+    console.log(company)
 
 
     return res.status(200).json({

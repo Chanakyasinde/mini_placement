@@ -23,11 +23,16 @@ const createStudentSignup = async (studentData) => {
 
     const created = await prisma.students.create({
         data: {
-            ...studentData,
+            studentName: studentData.studentName,
+            email: studentData.email,
+            password: hashedPass,
             phoneNumber: phoneAsBigInt,
-            password: hashedPass
+            college: studentData.college,
+            cgpa: studentData.cgpa || null,
+            yearOfPassing: studentData.yearOfPassing || null,
+            resume_link: studentData.resume_link,
         }
-    })
+    });
     return created
 
 
@@ -151,4 +156,17 @@ const fetchAppliedJobs = async (studentEmail) => {
     console.log("Applied jobs fetched:", application)
     return application
 }
-module.exports = { createStudentSignup, checkStudentLogin, studentInformation, fetchJobsForStudent, applicationToJob, studentUpdated, fetchAppliedJobs }
+const totalJobs = async (req,res) => {
+    const jobs = await prisma.jobs.findMany({
+        where: {
+            isActive: true,
+        },
+        include: {
+            company: {
+                status: true
+            }
+        }
+    })
+    return res.status(200).json(jobs)
+}
+module.exports = { createStudentSignup, checkStudentLogin, studentInformation, fetchJobsForStudent, applicationToJob, studentUpdated, fetchAppliedJobs, totalJobs }

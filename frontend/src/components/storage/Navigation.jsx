@@ -13,10 +13,10 @@ export default function Navigation() {
           <a href="#home" className="nav-link">
             Home
           </a>
-          <a href="#jobs" className="nav-link">
+          <a href="/total-jobs" className="nav-link">
             Jobs
           </a>
-          <a href="#companies" className="nav-link">
+          <a href="/total-companies" className="nav-link">
             Companies
           </a>
           <a href="#about" className="nav-link">
