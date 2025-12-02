@@ -177,7 +177,7 @@ export default function Login() {
 }
 
 const styles = {
-  page: { backgroundColor: "#000", minHeight: "100vh", color: "#fff", display: "flex" },
+  page: { backgroundColor: "#000", minHeight: "100vh", color: "#fff", display: "flex", fontFamily: "'Inter', sans-serif" },
 
   leftPane: {
     padding: 48,
@@ -185,6 +185,7 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     height: "100vh",
+    backgroundColor: "#000000",
   },
 
   heading: {
@@ -213,8 +214,8 @@ const styles = {
   },
 
   inactiveCard: {
-    backgroundColor: "#1f2937",
-    border: "2px solid #4b5563",
+    backgroundColor: "#1a1a1a",
+    border: "2px solid #333333",
   },
 
   roleContent: {
@@ -241,15 +242,16 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     padding: 48,
-    backgroundColor: "#1f2937",
+    backgroundColor: "#0a0a0a",
   },
 
   formContainer: {
     width: "90%",
     maxWidth: 600,
-    backgroundColor: "#111827",
+    backgroundColor: "#121212",
     padding: 40,
     borderRadius: 20,
+    border: "1px solid #333333",
   },
 
   formHeading: {
@@ -266,16 +268,17 @@ const styles = {
     marginBottom: 6,
     display: "block",
     fontWeight: 500,
-    color: "#e5e7eb",
+    color: "#a3a3a3",
   },
 
   input: {
     width: "100%",
     padding: 10,
     borderRadius: 8,
-    backgroundColor: "#374151",
+    backgroundColor: "#262626",
     color: "#fff",
-    border: "1px solid #4b5563",
+    border: "1px solid #404040",
+    outline: "none",
   },
 
   button: {

@@ -41,6 +41,7 @@ const CompanyDashboard = () => {
             }
 
             const profileData = await profileResponse.json();
+            setCompanyData(profileData);
 
             // 2. Fetch Jobs separately
             const jobsResponse = await fetch(`http://localhost:3000/company/dashboard/job`, {
@@ -65,6 +66,7 @@ const CompanyDashboard = () => {
             } else {
                 throw new Error('Invalid company data received');
             }
+            console.log(companyData)
 
             setLoading(false);
         } catch (err) {
