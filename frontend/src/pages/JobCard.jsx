@@ -11,7 +11,8 @@ const JobCard = () => {
         jobTitle: '',
         stipend: '',
         description: '',
-        skills: '', // We'll handle this as a comma-separated string in the UI
+        skills: '',
+        location: '',
         isActive: true
     });
     const [loading, setLoading] = useState(false);
@@ -44,6 +45,7 @@ const JobCard = () => {
                 stipend: job.stipend,
                 description: job.description,
                 skills: job.skills ? job.skills.map(s => s.skillName).join(", ") : "",
+                location: job.location,
                 isActive: job.isActive ?? true
             });
         } catch (err) {
@@ -65,6 +67,7 @@ const JobCard = () => {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        console.log("Submitting Form Data:", formData);
 
         try {
             const token = localStorage.getItem('companyToken');
@@ -134,6 +137,18 @@ const JobCard = () => {
                             onChange={handleChange}
                             style={styles.input}
                             placeholder="e.g. ₹50000/month"
+                        />
+                    </div>
+
+                    <div style={styles.formGroup}>
+                        <label style={styles.label}>Location</label>
+                        <input
+                            type="text"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                            style={styles.input}
+                            placeholder="e.g. Bangalore"
                         />
                     </div>
 

@@ -6,14 +6,49 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
   const [studentData, setStudentData] = useState(null);
   const [jobs, setJobs] = useState([]);
-  const [alreadyApplied, setAlreadyApplied] = useState([]); // ⬅ NEW
+  const [filteredJobs, setFilteredJobs] = useState([]); // ⬅ NEW: Store filtered jobs
+  const [alreadyApplied, setAlreadyApplied] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [applying, setApplying] = useState(null);
 
+  // Search & Filter State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('Company Name'); // Default filter
+
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  // Filter Logic
+  useEffect(() => {
+    if (!jobs.length) {
+      setFilteredJobs([]);
+      return;
+    }
+
+    const lowerTerm = searchTerm.toLowerCase().trim();
+    if (!lowerTerm) {
+      setFilteredJobs(jobs);
+      return;
+    }
+
+    const filtered = jobs.filter(job => {
+      if (filterType === 'Company Name') {
+        return job.company.companyName?.toLowerCase().includes(lowerTerm);
+      } else if (filterType === 'Location') {
+        return job.location?.toLowerCase().includes(lowerTerm);
+      } else if (filterType === 'Stipend') {
+        return job.stipend?.toLowerCase().includes(lowerTerm);
+      } else if (filterType === 'Skills') {
+        // job.Skills is an array of strings
+        return job.skills?.some(skill => skill.toLowerCase().includes(lowerTerm));
+      }
+      return false;
+    });
+
+    setFilteredJobs(filtered);
+  }, [searchTerm, filterType, jobs]);
 
   const fetchDashboardData = async () => {
     try {
@@ -38,7 +73,8 @@ const StudentDashboard = () => {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
       const jobsData = await jobsResponse.json();
-      const jobsList = Array.isArray(jobsData.data) ? jobsData.data : [];
+      console.log(jobsData);
+      const jobsList = jobsData.data
 
       // Fetch applied jobs (NEW)
       const appliedRes = await fetch(`http://localhost:3000/student/jobsApplied`, {
@@ -46,10 +82,11 @@ const StudentDashboard = () => {
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
       const appliedData = await appliedRes.json();
-      setAlreadyApplied(appliedData.data || []); // → [{ jobId, status }, { jobId, status }]
+      setAlreadyApplied(appliedData.data || []);
 
       setStudentData(profileData.data);
       setJobs(jobsList);
+      setFilteredJobs(jobsList);
       setLoading(false);
     } catch (err) {
       console.error("Dashboard Fetch Error:", err);
@@ -91,7 +128,7 @@ const StudentDashboard = () => {
       const response = await res.json();
       if (res.ok) {
         alert("Applied successfully!");
-        setAlreadyApplied(prev => [...prev, { jobId, status: 'Applied' }]); // instant UI update
+        setAlreadyApplied(prev => [...prev, { jobId, status: 'Applied' }]);
       } else {
         alert(response.message || 'Failed to apply');
       }
@@ -145,49 +182,96 @@ const StudentDashboard = () => {
             <h2 style={styles.sectionTitle}>Available Jobs</h2>
           </div>
 
+          {/* Search & Filter Component */}
+          <div style={styles.searchContainer}>
+            <select
+              style={styles.filterDropdown}
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+            >
+              <option value="Company Name">Company Name</option>
+              <option value="Location">Location</option>
+              <option value="Stipend">Stipend</option>
+              <option value="Skills">Skills</option>
+            </select>
+
+            <input
+              type="text"
+              placeholder={`Search by ${filterType}...`}
+              style={styles.searchInput}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
           <div style={styles.jobsList}>
-            {jobs.length === 0 ? (
+            {filteredJobs.length === 0 ? (
               <div style={styles.emptyState}>
-                <p style={styles.emptyStateText}>No jobs available at the moment</p>
+                <p style={styles.emptyStateText}>No jobs found matching your search.</p>
               </div>
             ) : (
-              jobs.map(job => (
+              filteredJobs.map(job => (
                 <div key={job.jobId} style={styles.jobCard}>
                   <div
                     style={{ ...styles.jobInfo, cursor: 'pointer' }}
                     onClick={() => navigate(`/student/job/${job.jobId}`)}
                   >
-                    <h3 style={styles.jobTitle}>{job.jobTitle || 'Untitled Job'}</h3>
+                    <h3 style={styles.companyName}>{job.company.companyName || 'Company'}</h3>
 
-                    <div style={styles.jobMeta}>
-                      <span style={styles.jobMetaItem}>{job.companyName || 'Company'}</span>
-                      <span style={styles.jobDivider}>•</span>
-                      <span style={styles.jobMetaItem}>{job.location || 'Remote'}</span>
+                    <div style={styles.jobDetailsGrid}>
+                      <div style={styles.jobDetailRow}>
+                        <span style={styles.jobLabel}>Location:</span>
+                        <span style={styles.jobValue}>{job.location || 'Remote'}</span>
+                      </div>
+
+                      <div style={styles.jobDetailRow}>
+                        <span style={styles.jobLabel}>Job Title:</span>
+                        <span style={styles.jobValue}>{job.jobTitle || 'Untitled Job'}</span>
+                      </div>
+
                       {job.stipend && (
-                        <>
-                          <span style={styles.jobDivider}>•</span>
-                          <span style={styles.jobMetaItem}>{job.stipend}</span>
-                        </>
+                        <div style={styles.jobDetailRow}>
+                          <span style={styles.jobLabel}>Stipend:</span>
+                          <span style={styles.jobValue}>{job.stipend}</span>
+                        </div>
                       )}
+
+                      <div style={styles.jobDetailRow}>
+                        <span style={styles.jobLabel}>Status:</span>
+                        <span style={{ ...styles.jobValue, color: job.isActive ? '#22c55e' : '#ef4444' }}>
+                          {job.isActive ? 'Active' : 'Closed'}
+                        </span>
+                      </div>
+
+                      <div style={styles.jobDetailRow}>
+                        <span style={styles.jobLabel}>Posted on:</span>
+                        <span style={styles.jobValue}>{job.createdAt ? new Date(job.createdAt).toLocaleDateString() : 'N/A'}</span>
+                      </div>
                     </div>
 
                     {job.description && (
-                      <p style={styles.jobDescription}>
-                        {job.description.substring(0, 150)}
-                        {job.description.length > 150 ? '...' : ''}
-                      </p>
+                      <div style={styles.descriptionSection}>
+                        <span style={styles.jobLabel}>Description:</span>
+                        <p style={styles.jobDescription}>
+                          {job.description.substring(0, 150)}
+                          {job.description.length > 150 ? '...' : ''}
+                        </p>
+                      </div>
                     )}
 
-                    {job.Skills && job.Skills.length > 0 && (
-                      <div style={styles.skillsContainer}>
-                        {job.Skills.map((skill, idx) => (
-                          <span key={idx} style={styles.skillTag}>{skill}</span>
-                        ))}
+                    {job.skills && job.skills.length > 0 && (
+                      <div style={styles.skillsSection}>
+                        <span style={styles.jobLabel}>Skills Required:</span>
+                        <div style={styles.skillsContainer}>
+                          {job.skills.map((skill, idx) => (
+                            <span key={idx} style={styles.skillTag}>{skill.skillName}</span>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
 
-                  {/* 🔥 Updated Apply Button */}
+                  {/* Apply Button */}
                   <button
                     style={{
                       ...styles.applyButton,
@@ -221,6 +305,7 @@ const StudentDashboard = () => {
         {/* Profile Card */}
         <div style={styles.infoCard}>
           <h3 style={styles.infoTitle}>Your Profile</h3>
+          <h2 style={{ fontSize: '14px', textAlign: 'center', margin: '5px', color: '#de3c3c' }}> The information provided below will be sent to company when applied.</h2>
           <div style={styles.infoGrid}>
             <div style={styles.infoItem}><span style={styles.infoLabel}>Email</span><span style={styles.infoValue}>{studentData?.email}</span></div>
             <div style={styles.infoItem}><span style={styles.infoLabel}>Phone</span><span style={styles.infoValue}>{studentData?.phoneNumber}</span></div>
@@ -313,38 +398,56 @@ const styles = {
     borderRadius: '12px',
     padding: '1.5rem',
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: 'column', // Changed to column
+    gap: '1rem',
     transition: 'border-color 0.2s',
   },
   jobInfo: {
-    flex: 1,
-  },
-  jobTitle: {
-    fontSize: '1.25rem',
-    fontWeight: '600',
-    marginBottom: '0.5rem',
-    color: '#ffffff',
-  },
-  jobMeta: {
     display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    marginBottom: '0.75rem',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
+    gap: '0.75rem',
   },
-  jobMetaItem: {
+  companyName: {
+    fontSize: '1.4rem',
+    fontWeight: 'bold',
+    color: '#ffffff',
+    textAlign: 'center',
+    marginBottom: '0.5rem',
+  },
+  jobDetailsGrid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '0.5rem',
+    marginBottom: '0.5rem',
+  },
+  jobDetailRow: {
+    display: 'flex',
+    gap: '0.5rem',
+    alignItems: 'center',
+  },
+  jobLabel: {
     fontSize: '0.9rem',
     color: '#a3a3a3',
+    fontWeight: '600',
   },
-  jobDivider: {
-    color: '#666666',
+  jobValue: {
+    fontSize: '0.95rem',
+    color: '#e5e5e5',
+  },
+  descriptionSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.25rem',
   },
   jobDescription: {
     fontSize: '0.95rem',
     color: '#cccccc',
     lineHeight: '1.5',
-    marginBottom: '1rem',
+  },
+  skillsSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem',
   },
   skillsContainer: {
     display: 'flex',
@@ -362,13 +465,13 @@ const styles = {
     backgroundColor: '#ffffff',
     color: '#000000',
     border: 'none',
-    padding: '0.5rem 1.5rem',
+    padding: '0.75rem 1.5rem',
     borderRadius: '6px',
-    fontSize: '0.9rem',
+    fontSize: '1rem',
     fontWeight: '600',
     cursor: 'pointer',
-    marginLeft: '1rem',
-    whiteSpace: 'nowrap',
+    width: '100%', // Full width button
+    marginTop: '0.5rem',
   },
   infoCard: {
     backgroundColor: '#1a1a1a',
@@ -442,6 +545,31 @@ const styles = {
   },
   emptyStateText: {
     fontSize: '1.1rem',
+  },
+  searchContainer: {
+    display: 'flex',
+    gap: '1rem',
+    marginBottom: '1rem',
+  },
+  filterDropdown: {
+    padding: '0.75rem',
+    borderRadius: '8px',
+    backgroundColor: '#1a1a1a',
+    color: '#ffffff',
+    border: '1px solid #333333',
+    fontSize: '0.95rem',
+    outline: 'none',
+    cursor: 'pointer',
+  },
+  searchInput: {
+    flex: 1,
+    padding: '0.75rem',
+    borderRadius: '8px',
+    backgroundColor: '#1a1a1a',
+    color: '#ffffff',
+    border: '1px solid #333333',
+    fontSize: '0.95rem',
+    outline: 'none',
   }
 };
 

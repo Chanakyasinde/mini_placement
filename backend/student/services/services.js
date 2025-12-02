@@ -71,8 +71,13 @@ const fetchJobsForStudent = async (studentEmail) => {
             company: {
                 status: true
             }
-        }
+        },
+        include: {
+            company: true,
+            skills: true
+        },
     })
+    console.log("Jobs fetched:", job)
     return job
 }
 const applicationToJob = async (studentEmail, jobId) => {

@@ -60,6 +60,7 @@ const createJobIfNotExists = async (jobData) => {
       jobTitle: jobData.jobTitle,
       isActive: true,
       stipend: jobData.stipend,
+      location: jobData.location,
       description: jobData.description,
       skills: {
         connectOrCreate: jobData.skills.map(skill => ({
@@ -70,6 +71,7 @@ const createJobIfNotExists = async (jobData) => {
     },
     include: { skills: true }
   })
+  console.log("New job created:",newJob);
   return newJob;
 
 }
