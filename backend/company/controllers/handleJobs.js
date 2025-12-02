@@ -18,6 +18,7 @@ const createJobs = async (req, res) => {
         };
 
         const created = await createJobIfNotExists(jobData);
+        console.log("Job created:", created);
 
         return res.status(201).json({
             message: "Job Created Successfully",
@@ -97,6 +98,7 @@ const updateJob = async (req, res) => {
             jobTitle: updateData.jobTitle,
             isActive: true,
             stipend: updateData.stipend,
+            location: updateData.location,
             description: updateData.description,
             skills: {
                 connectOrCreate: updateData.skills.map(skill => ({

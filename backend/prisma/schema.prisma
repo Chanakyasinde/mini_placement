@@ -32,24 +32,15 @@ model companies {
   location       String?
   createdAt      DateTime @default(now())
   status         Boolean  @default(false)
-  adminId        Int?
-  admin          Admins?    @relation(fields: [adminId], references: [admin_id])
   jobs           jobs[]
-}
-
-model Admins {
-  admin_id    Int      @id @default(autoincrement())
-  admin_name  String
-  email       String   @unique
-  password    String
-  company    companies[]
 }
 model jobs {
   jobId      Int        @id @default(autoincrement())
   companyId   Int
   jobTitle   String
   isActive    Boolean    @default(true)
-  stipend     String?
+  location    String?
+  stipend     String
   description String?    @db.LongText
   createdAt   DateTime   @default(now())
   skills      skills[]   @relation("JobSkills")
