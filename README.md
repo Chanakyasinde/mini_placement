@@ -1,69 +1,129 @@
-#  Mini-Placement Portal
+# Mini-Placement Portal
 
-
-**Overview**
- This project aims to implement a bridge between students and recrutiers to make the recruitment process easy and simple. The portal allows companies to post jobs, students to apply with resumes, and placement coordinators to manage shortlisting pipelines and deadlines.
+A comprehensive web application designed to bridge the gap between students and recruiters, streamlining the campus placement process. This portal enables companies to post job openings and manage applications, while allowing students to showcase their profiles, upload resumes, and apply for jobs seamlessly.
 
 ---
 
-## Features
+## 🚀 Features
 
-1. Students -
-   
-   - Sign up/Login
-   - Resume made public
-   - create and update profile
-   - filter jobs
-   - apply to vertified job postings
-   - Track application status (Pending, Shortlisted, Rejected)
-   - Apply jobs before the deadline.
-  
-2. Recruiters -
+### 🎓 For Students
+- **User Authentication**: Secure Sign Up and Login functionality.
+- **Profile Management**: Create and update professional profiles with details like college, CGPA, and skills.
+- **Resume Management**: Upload and share resume links.
+- **Job Discovery**: Browse and filter verified job postings based on skills and preferences.
+- **Application Tracking**: Monitor the status of job applications (Pending, Shortlisted, Rejected).
 
-   - Fill the form and get verified by the admin.
-   - Get access to see the public resumes.
-   - Get access to the students applied to the company.
-   - Filter the students based upon the skills.
-   - Post Job openings.
-   - Edit the deadline to apply for the company.
-   - Post job description.
+### 🏢 For Recruiters
+- **Talent Search**: Access a database of public student resumes.
+- **Applicant Management**: View and manage students who have applied to specific job postings.
+- **Skill Filtering**: Filter candidates based on specific skill sets.
+- **Job Management**: Create and publish detailed job descriptions, including roles, stipends, and required skills.
 
-3. Admin -
-
-   - Approve the recruiters.
-   - Manage the students who can apply for jobs according to the cgpa.
-   - The companies are divided by phases on the basis of stipend and how big the           company is.
-  
-  ## KEY FEATURES
-
-  
-- **Job Posts** – Companies can create and publish job openings with details (role, CTC, skills, deadline).  
-- **Shortlisting Pipeline** – Track candidates through stages: *Applied → Shortlisted → Interview → Selected*.  
-- **Resume Management** – Students upload and share resume links (Drive/PDF/portal-hosted).  
-- **Skill Matching** – Jobs specify required skills; candidates are filtered based on resumes/skills.  
-- **Deadline Management** – Admins set application deadlines; system auto-closes expired posts.  
-- **Role-Based Access** – Separate dashboards for Students, Companies, and Placement Cell/Admin.  
+### 🔑 Key Highlights
+- **Role-Based Access Control (RBAC)**: Distinct dashboards and permissions for Students and Companies.
+- **Skill Matching**: Intelligent filtering to match candidates with job requirements.
+- **Secure Data**: JWT-based authentication ensures data privacy and security.
 
 ---
 
-##  Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend:** React.js 
-- **Backend:** Node.js + Express.js  
-- **Database:** MySQL / Prisma ORM
-- **Authentication:** JWT / OAuth  
-- **Deployment:** Vercel  
+### Frontend
+- **Framework**: [React.js](https://reactjs.org/) (Vite)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Routing**: [React Router DOM](https://reactrouter.com/)
+
+### Backend
+- **Runtime**: [Node.js](https://nodejs.org/)
+- **Framework**: [Express.js](https://expressjs.com/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Authentication**: JWT (JSON Web Tokens) & bcryptjs
+
+### Deployment
+- **Frontend**: Vercel
+- **Backend**: Render
 
 ---
 
-##  Workflow
+## ⚙️ Installation & Setup
 
-1. **Admin/Placement Cell** creates job posts with requirements and deadlines.  
-2. **Students** register, upload resumes, and apply for jobs.  
-3. **Companies** view applicants, shortlist based on skills/resumes, and update candidate status.  
-4. **Pipeline** manages the candidate journey from application to selection.  
+Follow these steps to set up the project locally.
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+- PostgreSQL installed and running
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/mini-placement-portal.git
+cd mini-placement-portal
+```
+
+### 2. Backend Setup
+Navigate to the backend directory and install dependencies:
+```bash
+cd backend
+npm install
+```
+
+Create a `.env` file in the `backend` directory with the following variables:
+```env
+PORT=3000
+DATABASE_URL="postgresql://user:password@localhost:5432/mini_placement?schema=public"
+JWT_SECRET="your_super_secret_key"
+```
+
+Run database migrations:
+```bash
+npx prisma migrate dev --name init
+```
+
+Start the backend server:
+```bash
+npm start
+# OR for development
+npm run dev
+```
+
+### 3. Frontend Setup
+Open a new terminal, navigate to the frontend directory, and install dependencies:
+```bash
+cd frontend
+npm install
+```
+
+Start the development server:
+```bash
+npm run dev
+```
+
+The frontend should now be running on `http://localhost:5173` (or similar).
 
 ---
-## ERP Diagram
 
-Link - https://dbdiagram.io/d/68dc1a6bd2b621e422a5b666
+## 📊 ERP Diagram
+
+Visualize the database schema and relationships:
+[View ERP Diagram](https://dbdiagram.io/d/68f638ed2e68d21b4154e6f0)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the ISC License.
