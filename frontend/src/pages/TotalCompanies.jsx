@@ -11,7 +11,7 @@ const TotalCompanies = () => {
     useEffect(() => {
         const fetchCompanies = async () => {
             try {
-                const response = await fetch('http://localhost:3000/company/getAllCompanies');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/company/getAllCompanies`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch companies');
                 }

@@ -12,7 +12,7 @@ const TotalJobs = () => {
         const fetchJobs = async () => {
             try {
                 // Fetch from the public student endpoint
-                const response = await fetch('http://localhost:3000/student/totalJobs');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/student/totalJobs`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch jobs');
                 }

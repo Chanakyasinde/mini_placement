@@ -22,7 +22,7 @@ const StudentProfile = () => {
                 setError('Please login to access profile');
                 return;
             }
-            const response = await fetch(`http://localhost:3000/student/dashboard`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/student/dashboard`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ const StudentProfile = () => {
             }
 
             const token = localStorage.getItem('studentToken');
-            const response = await fetch(`http://localhost:3000/student/dashboard/profile`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/student/dashboard/profile`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

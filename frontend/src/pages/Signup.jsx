@@ -7,16 +7,16 @@ export default function Signup() {
   const [selected, setSelected] = useState("student");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-const [studentForm, setStudentForm] = useState({
-  studentName: "",
-  email: "",
-  password: "",
-  phoneNumber: "",
-  college: "",
-  cgpa: "",
-  yearOfPassing: "",
-  resume_link: "",
-});
+  const [studentForm, setStudentForm] = useState({
+    studentName: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    college: "",
+    cgpa: "",
+    yearOfPassing: "",
+    resume_link: "",
+  });
 
   const [companyForm, setCompanyForm] = useState({
     companyName: "",
@@ -59,7 +59,7 @@ const [studentForm, setStudentForm] = useState({
     const endpoint = selected === "student" ? "/student/signup" : "/company/signup";
     console.log(formState)
     try {
-      const res = await fetch(`http://localhost:3000${endpoint}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formState),

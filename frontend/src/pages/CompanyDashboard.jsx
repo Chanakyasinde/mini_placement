@@ -28,7 +28,7 @@ const CompanyDashboard = () => {
             }
 
             // 1. Fetch Company Profile
-            const profileResponse = await fetch(`http://localhost:3000/company/dashboard`, {
+            const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/company/dashboard`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -44,7 +44,7 @@ const CompanyDashboard = () => {
             setCompanyData(profileData);
 
             // 2. Fetch Jobs separately
-            const jobsResponse = await fetch(`http://localhost:3000/company/dashboard/job`, {
+            const jobsResponse = await fetch(`${import.meta.env.VITE_API_URL}/company/dashboard/job`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -112,8 +112,8 @@ const CompanyDashboard = () => {
         <div style={styles.container}>
             {/* Header with Profile Button */}
             <div style={styles.header}>
-                <div style={styles.logo} onClick={()=> navigate('/')}>PlacementHub</div>
-                <button style={{ ...styles.profileButton, marginLeft: 'auto',marginRight: '8px',backgroundColor:'#f6f3f3ff',transition: 'opacity 0.2s'}} onClick={handleLogout}>
+                <div style={styles.logo} onClick={() => navigate('/')}>PlacementHub</div>
+                <button style={{ ...styles.profileButton, marginLeft: 'auto', marginRight: '8px', backgroundColor: '#f6f3f3ff', transition: 'opacity 0.2s' }} onClick={handleLogout}>
                     Log Out
                 </button>
                 <button style={styles.profileButton} onClick={handleProfileClick}>
@@ -181,27 +181,27 @@ const styles = {
         fontFamily: "'Inter', sans-serif",
     },
     header: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '1.5rem 3rem',
-    borderBottom: '1px solid #333333',
-    justifyContent: 'flex-start',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '1.5rem 3rem',
+        borderBottom: '1px solid #333333',
+        justifyContent: 'flex-start',
     },
     logo: {
         fontSize: '1.5rem',
         fontWeight: 'bold',
     },
     profileButton: {
-    backgroundColor: '#f9f6f6ff',
-    color: '#000000',
-    border: 'none',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '6px',
-    fontSize: '0.95rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'opacity 0.2s',
-},
+        backgroundColor: '#f9f6f6ff',
+        color: '#000000',
+        border: 'none',
+        padding: '0.75rem 1.5rem',
+        borderRadius: '6px',
+        fontSize: '0.95rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        transition: 'opacity 0.2s',
+    },
     welcomeSection: {
         padding: '4rem 3rem 2rem',
         textAlign: 'center',

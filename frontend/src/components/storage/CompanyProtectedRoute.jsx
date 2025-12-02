@@ -10,7 +10,7 @@ export default function CompanyProtectedRoute({ children }) {
       if (!token) return setIsValid(false);
 
       try {
-        const res = await fetch("http://localhost:3000/company/verify", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/company/verify`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

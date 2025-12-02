@@ -28,7 +28,7 @@ const JobCard = () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('companyToken');
-            const response = await fetch(`http://localhost:3000/company/dashboard/job/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/company/dashboard/job/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -71,11 +71,11 @@ const JobCard = () => {
 
         try {
             const token = localStorage.getItem('companyToken');
-            const url = isEditMode?
-            `http://localhost:3000/company/dashboard/job/${id}`:
-            `http://localhost:3000/company/dashboard/job`;
+            const url = isEditMode ?
+                `${import.meta.env.VITE_API_URL}/company/dashboard/job/${id}` :
+                `${import.meta.env.VITE_API_URL}/company/dashboard/job`;
 
-            const method = isEditMode ? 'PUT': 'POST';
+            const method = isEditMode ? 'PUT' : 'POST';
 
             // Process skills from string to array
             const payload = {
@@ -89,7 +89,7 @@ const JobCard = () => {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                    
+
                 },
                 body: JSON.stringify(payload)
             });

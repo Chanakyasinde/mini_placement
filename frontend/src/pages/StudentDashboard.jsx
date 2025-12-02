@@ -61,14 +61,14 @@ const StudentDashboard = () => {
       }
 
       // Fetch student profile
-      const profileResponse = await fetch(`http://localhost:3000/student/dashboard`, {
+      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/student/dashboard`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
       const profileData = await profileResponse.json();
 
       // Fetch available jobs
-      const jobsResponse = await fetch(`http://localhost:3000/student/dashboard/jobsStudent`, {
+      const jobsResponse = await fetch(`${import.meta.env.VITE_API_URL}/student/dashboard/jobsStudent`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
@@ -77,7 +77,7 @@ const StudentDashboard = () => {
       const jobsList = jobsData.data
 
       // Fetch applied jobs (NEW)
-      const appliedRes = await fetch(`http://localhost:3000/student/jobsApplied`, {
+      const appliedRes = await fetch(`${import.meta.env.VITE_API_URL}/student/jobsApplied`, {
         method: 'GET',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
@@ -119,7 +119,7 @@ const StudentDashboard = () => {
       setApplying(jobId);
       const token = localStorage.getItem('studentToken');
 
-      const res = await fetch('http://localhost:3000/student/apply', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/student/apply`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobId })
