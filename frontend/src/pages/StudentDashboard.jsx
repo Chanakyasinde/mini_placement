@@ -124,8 +124,9 @@ const StudentDashboard = () => {
     <div style={styles.container}>
       {/* Header */}
       <div style={styles.header}>
+        <img src="/job-search.png" alt="PlacementHub Logo" className="logo-icon" />
         <div style={styles.logo}>PlacementHub</div>
-        <button style={{ ...styles.profileButton, marginLeft: 'auto',marginRight: '8px',backgroundColor:'#f6f3f3ff',transition: 'opacity 0.2s' }} onClick={handleLogout}>Log Out</button>
+        <button style={{ ...styles.profileButton, marginLeft: 'auto', marginRight: '8px', backgroundColor: '#f6f3f3ff', transition: 'opacity 0.2s' }} onClick={handleLogout}>Log Out</button>
         <button style={styles.profileButton} onClick={handleProfileClick}>Student Profile</button>
       </div>
 
@@ -223,8 +224,9 @@ const StudentDashboard = () => {
           <div style={styles.infoGrid}>
             <div style={styles.infoItem}><span style={styles.infoLabel}>Email</span><span style={styles.infoValue}>{studentData?.email}</span></div>
             <div style={styles.infoItem}><span style={styles.infoLabel}>Phone</span><span style={styles.infoValue}>{studentData?.phoneNumber}</span></div>
-            <div style={styles.infoItem}><span style={styles.infoLabel}>College</span><span style={styles.infoValue}>{studentData?.collegeName}</span></div>
-            <div style={styles.infoItem}><span style={styles.infoLabel}>CGPA</span><span style={styles.infoValue}>{studentData?.cgpa}</span></div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>College</span><span style={styles.infoValue}>{studentData?.college || 'N/A'}</span></div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>CGPA</span><span style={styles.infoValue}>{studentData?.cgpa || 'N/A'}</span></div>
+            <div style={styles.infoItem}><span style={styles.infoLabel}>Year of Passing</span><span style={styles.infoValue}>{studentData?.yearOfPassing || 'N/A'}</span></div>
           </div>
         </div>
 
@@ -248,7 +250,7 @@ const styles = {
     padding: '1.5rem 3rem',
     borderBottom: '1px solid #333333',
     justifyContent: 'flex-start',
-},
+  },
   logo: {
     fontSize: '1.5rem',
     fontWeight: 'bold',
@@ -263,7 +265,7 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'opacity 0.2s',
-},
+  },
   welcomeSection: {
     padding: '4rem 3rem 2rem',
     textAlign: 'center',

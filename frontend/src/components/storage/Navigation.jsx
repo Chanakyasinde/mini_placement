@@ -5,7 +5,7 @@ export default function Navigation() {
     <nav className="navbar">
       <div className="navbar-container">
         <div className="navbar-logo">
-          <span className="logo-icon">🏢</span>
+          <img src="/job-search.png" alt="PlacementHub Logo" className="logo-icon" />
           <span className="logo-text">PlacementHub</span>
         </div>
 
@@ -29,7 +29,7 @@ export default function Navigation() {
           <Link to={'/login'}>
             <button className="btn-login">Login</button>
           </Link>
-          <Link to={'/signup'}>   
+          <Link to={'/signup'}>
             <button className="btn-signup">Sign Up</button>
           </Link>
         </div>

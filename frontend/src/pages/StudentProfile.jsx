@@ -47,11 +47,41 @@ const StudentProfile = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setTempData({ ...tempData, [name]: value });
+
+        // Special handling for CGPA
+        if (name === 'cgpa') {
+            // Allow empty value
+            if (value === '') {
+                setTempData({ ...tempData, [name]: value });
+                return;
+            }
+
+            // Allow digits and a single decimal point
+            if (/^\d*\.?\d*$/.test(value)) {
+                setTempData({ ...tempData, [name]: value });
+            }
+        } else {
+            setTempData({ ...tempData, [name]: value });
+        }
     };
 
     const handleSave = async () => {
         try {
+            // Create a copy of data to modify
+            let dataToSend = { ...tempData };
+
+            // Validate and round CGPA before saving
+            if (dataToSend.cgpa) {
+                const cgpaValue = parseFloat(dataToSend.cgpa);
+                if (isNaN(cgpaValue) || cgpaValue <= 0 || cgpaValue > 10) {
+                    alert("CGPA must be greater than 0 and less than or equal to 10");
+                    return;
+                }
+                // Round to 2 decimal places
+                const rounded = Math.round(cgpaValue * 100) / 100;
+                dataToSend.cgpa = rounded.toString();
+            }
+
             const token = localStorage.getItem('studentToken');
             const response = await fetch(`http://localhost:3000/student/dashboard/profile`, {
                 method: 'PUT',
@@ -59,18 +89,21 @@ const StudentProfile = () => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(tempData)
+                body: JSON.stringify(dataToSend)
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error('Failed to update profile');
+                const errorMessage = data.message || data.error || 'Failed to update profile';
+                throw new Error(errorMessage);
             }
 
-            const data = await response.json();
             setFormData(tempData);
             setIsEditing(false);
             alert("Profile updated successfully!");
         } catch (err) {
+            console.error("Update error:", err);
             alert("Failed to update profile: " + err.message);
         }
     };
@@ -286,7 +319,7 @@ const StudentProfile = () => {
             <div className="header-section">
                 <h1 className="student-name">{isEditing ? tempData.studentName : formData.studentName}</h1>
                 <div className="student-college">
-                    {isEditing ? tempData.collegeName : formData.collegeName}
+                    {isEditing ? tempData.college : formData.college}
                 </div>
             </div>
 
@@ -358,13 +391,13 @@ const StudentProfile = () => {
                         {isEditing ? (
                             <input
                                 type="text"
-                                name="collegeName"
+                                name="college"
                                 className="form-input"
-                                value={tempData.collegeName || ''}
+                                value={tempData.college || ''}
                                 onChange={handleChange}
                             />
                         ) : (
-                            <div className="form-value">{formData.collegeName || 'N/A'}</div>
+                            <div className="form-value">{formData.college || 'N/A'}</div>
                         )}
                     </div>
 

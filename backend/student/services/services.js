@@ -103,7 +103,15 @@ const applicationToJob = async (studentEmail, jobId) => {
 }
 
 const studentUpdated = async (studentEmail, updateData) => {
-    const { student_id, email, ...dataToUpdate } = updateData;
+    const allowedFields = ['studentName', 'phoneNumber', 'college', 'cgpa', 'yearOfPassing', 'resume_link'];
+
+    const dataToUpdate = {};
+
+    allowedFields.forEach(field => {
+        if (updateData[field] !== undefined) {
+            dataToUpdate[field] = updateData[field];
+        }
+    });
 
     if (dataToUpdate.phoneNumber) {
         dataToUpdate.phoneNumber = BigInt(dataToUpdate.phoneNumber);
