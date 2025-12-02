@@ -67,7 +67,10 @@ const studentInformation = async (studentEmail) => {
 const fetchJobsForStudent = async (studentEmail) => {
     const job = await prisma.jobs.findMany({
         where: {
-            isActive: true
+            isActive: true,
+            company: {
+                status: true
+            }
         }
     })
     return job
