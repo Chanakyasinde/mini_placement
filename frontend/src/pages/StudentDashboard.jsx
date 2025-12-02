@@ -162,7 +162,7 @@ const StudentDashboard = () => {
       {/* Header */}
       <div style={styles.header}>
         <img src="/job-search.png" alt="PlacementHub Logo" className="logo-icon" />
-        <div style={styles.logo}>PlacementHub</div>
+        <div style={styles.logo} onClick={() => navigate('/')}>PlacementHub</div>
         <button style={{ ...styles.profileButton, marginLeft: 'auto', marginRight: '8px', backgroundColor: '#f6f3f3ff', transition: 'opacity 0.2s' }} onClick={handleLogout}>Log Out</button>
         <button style={styles.profileButton} onClick={handleProfileClick}>Student Profile</button>
       </div>
@@ -216,7 +216,39 @@ const StudentDashboard = () => {
                     style={{ ...styles.jobInfo, cursor: 'pointer' }}
                     onClick={() => navigate(`/student/job/${job.jobId}`)}
                   >
-                    <h3 style={styles.companyName}>{job.company.companyName || 'Company'}</h3>
+                    <div style={styles.cardHeader}>
+                      <h3 style={styles.companyName}>{job.company.companyName || 'Company'}</h3>
+
+                      {/* Apply Button moved to top right */}
+                      <button
+                        style={{
+                          ...styles.applyButton,
+                          backgroundColor: hasAlreadyApplied(job.jobId) ?
+                            (getApplicationStatus(job.jobId) === 'Shortlisted' ? '#22c55e' :
+                              getApplicationStatus(job.jobId) === 'Rejected' ? '#ef4444' :
+                                '#555555')
+                            : '#ffffff',
+                          color: hasAlreadyApplied(job.jobId) ? '#ffffff' : '#000000',
+                          cursor: hasAlreadyApplied(job.jobId) ? 'default' : 'pointer',
+                          opacity: hasAlreadyApplied(job.jobId) ? 0.9 : 1,
+                          width: 'auto', // Auto width for header button
+                          marginTop: 0,
+                          padding: '0.5rem 1.25rem',
+                          fontSize: '0.9rem',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleApply(job.jobId);
+                        }}
+                        disabled={hasAlreadyApplied(job.jobId) || applying === job.jobId}
+                      >
+                        {hasAlreadyApplied(job.jobId)
+                          ? getApplicationStatus(job.jobId)
+                          : applying === job.jobId
+                            ? "Applying..."
+                            : "Apply"}
+                      </button>
+                    </div>
 
                     <div style={styles.jobDetailsGrid}>
                       <div style={styles.jobDetailRow}>
@@ -270,35 +302,12 @@ const StudentDashboard = () => {
                       </div>
                     )}
                   </div>
-
-                  {/* Apply Button */}
-                  <button
-                    style={{
-                      ...styles.applyButton,
-                      backgroundColor: hasAlreadyApplied(job.jobId) ?
-                        (getApplicationStatus(job.jobId) === 'Shortlisted' ? '#22c55e' :
-                          getApplicationStatus(job.jobId) === 'Rejected' ? '#ef4444' :
-                            '#555555')
-                        : '#ffffff',
-                      color: hasAlreadyApplied(job.jobId) ? '#ffffff' : '#000000',
-                      cursor: hasAlreadyApplied(job.jobId) ? 'default' : 'pointer',
-                      opacity: hasAlreadyApplied(job.jobId) ? 0.9 : 1
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleApply(job.jobId);
-                    }}
-                    disabled={hasAlreadyApplied(job.jobId) || applying === job.jobId}
-                  >
-                    {hasAlreadyApplied(job.jobId)
-                      ? getApplicationStatus(job.jobId)
-                      : applying === job.jobId
-                        ? "Applying..."
-                        : "Apply"}
-                  </button>
                 </div>
               ))
             )}
+
+            {/* Applied Jobs Link */}
+
           </div>
         </div>
 
@@ -314,7 +323,39 @@ const StudentDashboard = () => {
             <div style={styles.infoItem}><span style={styles.infoLabel}>Year of Passing</span><span style={styles.infoValue}>{studentData?.yearOfPassing || 'N/A'}</span></div>
           </div>
         </div>
+        <div
+          style={styles.appliedJobsLink}
+          onClick={() => navigate('/student/applied-jobs')}
+        >
+          <span style={{ fontSize: '1.1rem' }}>You have applied to {alreadyApplied.length} companies</span>
+          <span style={{ textDecoration: 'underline', cursor: 'pointer' }}>View all applications →</span>
+        </div>
 
+      </div>
+
+      {/* Trust & Stats Section */}
+      <div style={styles.content}>
+        <div style={{ gridColumn: '1 / -1' }}> {/* Span full width */}
+          <div style={styles.trustSection}>
+            <h2 style={styles.trustTitle}>Why Students Trust PlacementHub</h2>
+            <p style={styles.trustSubtitle}>Your gateway to verified opportunities and career growth</p>
+
+            <div style={styles.trustGrid}>
+              <div style={styles.trustItem}>
+                <h3 style={styles.trustItemTitle}>High Hiring Rate</h3>
+                <p style={styles.trustItemText}>Most of our students get hired within the first month of joining.</p>
+              </div>
+              <div style={styles.trustItem}>
+                <h3 style={styles.trustItemTitle}>100% Verified</h3>
+                <p style={styles.trustItemText}>All companies are manually verified to ensure genuine opportunities.</p>
+              </div>
+              <div style={styles.trustItem}>
+                <h3 style={styles.trustItemTitle}>Top Stipends</h3>
+                <p style={styles.trustItemText}>Access high-paying internships and job offers from top firms.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -391,53 +432,107 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
+    maxHeight: '80vh', // Limit height
+    overflowY: 'auto', // Enable scrolling
+    paddingRight: '0.5rem', // Space for scrollbar
+  },
+  // ... (existing styles) ...
+  trustSection: {
+    marginTop: '4rem',
+    padding: '3rem',
+    backgroundColor: '#1a1a1a',
+    borderRadius: '12px',
+    textAlign: 'center',
+    border: '1px solid #333333',
+  },
+  trustTitle: {
+    fontSize: '2rem',
+    fontWeight: '700',
+    marginBottom: '1rem',
+    color: '#ffffff',
+  },
+  trustSubtitle: {
+    fontSize: '1.1rem',
+    color: '#a3a3a3',
+    marginBottom: '2.5rem',
+  },
+  trustGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '2rem',
+  },
+  trustItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '1rem',
+  },
+  trustIcon: {
+    fontSize: '2.5rem',
+    marginBottom: '0.5rem',
+  },
+  trustItemTitle: {
+    fontSize: '1.25rem',
+    fontWeight: '600',
+    color: '#ffffff',
+  },
+  trustItemText: {
+    fontSize: '0.95rem',
+    color: '#a3a3a3',
+    lineHeight: '1.5',
   },
   jobCard: {
     backgroundColor: '#1a1a1a',
     border: '1px solid #333333',
     borderRadius: '12px',
-    padding: '1.5rem',
+    padding: '2rem', // Increased padding
     display: 'flex',
-    flexDirection: 'column', // Changed to column
-    gap: '1rem',
+    flexDirection: 'column',
+    gap: '1.5rem', // Increased gap
     transition: 'border-color 0.2s',
   },
   jobInfo: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.75rem',
+    gap: '1.25rem', // Increased gap
+  },
+  cardHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '0.5rem',
   },
   companyName: {
-    fontSize: '1.4rem',
+    fontSize: '1.5rem', // Slightly larger
     fontWeight: 'bold',
     color: '#ffffff',
-    textAlign: 'center',
-    marginBottom: '0.5rem',
+    textAlign: 'left',
+    marginBottom: 0,
   },
   jobDetailsGrid: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gap: '0.5rem',
-    marginBottom: '0.5rem',
+    gap: '1rem', // Increased gap
+    marginBottom: '1rem',
   },
   jobDetailRow: {
     display: 'flex',
-    gap: '0.5rem',
+    gap: '0.75rem', // Increased gap
     alignItems: 'center',
   },
   jobLabel: {
-    fontSize: '0.9rem',
+    fontSize: '0.95rem',
     color: '#a3a3a3',
     fontWeight: '600',
   },
   jobValue: {
-    fontSize: '0.95rem',
+    fontSize: '1rem',
     color: '#e5e5e5',
   },
   descriptionSection: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.25rem',
+    gap: '0.5rem', // Increased gap
   },
   jobDescription: {
     fontSize: '0.95rem',
@@ -461,6 +556,21 @@ const styles = {
     borderRadius: '4px',
     fontSize: '0.8rem',
   },
+  appliedJobsLink: {
+    marginTop: '1rem',
+    padding: '1.5rem',
+    backgroundColor: '#1a1a1a',
+    border: '1px solid #333333',
+    borderRadius: '12px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    cursor: 'pointer',
+    transition: 'border-color 0.2s',
+    ':hover': {
+      borderColor: '#ffffff',
+    }
+  },
   applyButton: {
     backgroundColor: '#ffffff',
     color: '#000000',
@@ -470,7 +580,7 @@ const styles = {
     fontSize: '1rem',
     fontWeight: '600',
     cursor: 'pointer',
-    width: '100%', // Full width button
+    width: '100%',
     marginTop: '0.5rem',
   },
   infoCard: {
