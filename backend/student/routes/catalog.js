@@ -13,5 +13,7 @@ router.put('/dashboard/profile', authMiddleware, updatedProfile)
 router.get('/dashboard/jobsStudent', getJobsForStudent);
 router.post('/apply', authMiddleware, applyToJobs)
 router.get('/jobsApplied', authMiddleware,jobsApplied )
-
+router.get("/verify", authMiddleware, (req, res) => {
+  res.status(200).json({ valid: true });
+});
 module.exports = router;

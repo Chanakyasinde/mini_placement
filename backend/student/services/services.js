@@ -140,9 +140,12 @@ const fetchAppliedJobs = async (studentEmail) => {
         where: {
             studentId: appliedStudents.student_id
         },
-        select: {
-            jobId: true,
-            status: true
+        include: {
+            job: {
+                include: {
+                    company: true
+                }
+            }
         }
     })
     console.log("Applied jobs fetched:", application)

@@ -15,6 +15,7 @@ import CompanyProfile from "./pages/CompanyProfile";
 import JobCard from "./pages/JobCard";
 import JobApplicants from "./pages/JobApplicants";
 import JobDetails from "./pages/JobDetails";
+import AppliedJobs from "./pages/AppliedJobs";
 
 function App() {
     return (
@@ -36,6 +37,11 @@ function App() {
                 <Route path="/student/job/:jobId" element={
                     <StudentProtectedRoute>
                         <JobDetails />
+                    </StudentProtectedRoute>
+                } />
+                <Route path="/student/applied-jobs" element={
+                    <StudentProtectedRoute>
+                        <AppliedJobs />
                     </StudentProtectedRoute>
                 } />
                 <Route path="/company/dashboard" element={

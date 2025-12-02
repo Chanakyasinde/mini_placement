@@ -17,18 +17,36 @@ export default function Login() {
     email: "",
     password: "",
   });
-  useEffect(()=>{
-    const tokenStudent = localStorage.getItem("studentToken");
-    console.log("Token Student:", tokenStudent);
-    const tokenCompany = localStorage.getItem("companyToken");
-    if(tokenCompany){
-      navigate('/company/dashboard')
-    }
-    if(tokenStudent){
-      navigate('/student/dashboard')
-    }
-    
-  },[])
+  useEffect(() => {
+    const verifyTokens = async () => {
+      const tokenStudent = localStorage.getItem("studentToken");
+      const tokenCompany = localStorage.getItem("companyToken");
+
+      try {
+        if (tokenCompany) {
+          const res = await fetch("http://localhost:3000/company/verify", {
+            headers: { Authorization: `Bearer ${tokenCompany}` }
+          });
+
+          if (res.ok) return navigate("/company/dashboard");
+          else localStorage.removeItem("companyToken");
+        }
+
+        if (tokenStudent) {
+          const res = await fetch("http://localhost:3000/student/verify", {
+            headers: { Authorization: `Bearer ${tokenStudent}` }
+          });
+
+          if (res.ok) return navigate("/student/dashboard");
+          else localStorage.removeItem("studentToken");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    verifyTokens();
+  }, []);
 
   useEffect(() => {
     const resizeHandler = () => setIsMobile(window.innerWidth < 768);

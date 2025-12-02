@@ -137,7 +137,7 @@ const JobDetails = () => {
                     <div style={styles.metaRow}>
                         <div style={styles.metaItem}>
                             <span style={styles.metaLabel}>Company:</span>
-                            <span style={styles.metaValue}>{job.companyName}</span>
+                            <span style={styles.metaValue}>{job.company.companyName}</span>
                         </div>
                         <div style={styles.metaItem}>
                             <span style={styles.metaLabel}>Location:</span>
@@ -156,12 +156,12 @@ const JobDetails = () => {
                         <p style={styles.description}>{job.description || 'No description provided'}</p>
                     </div>
 
-                    {job.Skills && job.Skills.length > 0 && (
+                    {job.skills && job.skills.length > 0 && (
                         <div style={styles.section}>
                             <h2 style={styles.sectionTitle}>Required Skills</h2>
                             <div style={styles.skillsContainer}>
-                                {job.Skills.map((skill, idx) => (
-                                    <span key={idx} style={styles.skillTag}>{skill}</span>
+                                {job.skills.map((skill, idx) => (
+                                    <span key={idx} style={styles.skillTag}>{skill.skillName}</span>
                                 ))}
                             </div>
                         </div>

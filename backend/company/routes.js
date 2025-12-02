@@ -18,4 +18,7 @@ router1.delete("/dashboard/job/:id", authMiddleware, deleteJob);
 router1.get("/dashboard/job/:id", authMiddleware, getJobById);
 router1.get("/jobs/appliedStudents", authMiddleware, getNumberOfStudentsApplied);
 router1.put("/jobs/application/:applicationId/status", authMiddleware, updateApplicationStatus);
+router1.get("/verify", authMiddleware, (req, res) => {
+  res.status(200).json({ valid: true });
+});
 module.exports = router1;

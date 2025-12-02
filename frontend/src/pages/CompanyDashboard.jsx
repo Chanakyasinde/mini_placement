@@ -110,7 +110,7 @@ const CompanyDashboard = () => {
         <div style={styles.container}>
             {/* Header with Profile Button */}
             <div style={styles.header}>
-                <div style={styles.logo}>PlacementHub</div>
+                <div style={styles.logo} onClick={()=> navigate('/')}>PlacementHub</div>
                 <button style={{ ...styles.profileButton, marginLeft: 'auto',marginRight: '8px',backgroundColor:'#f6f3f3ff',transition: 'opacity 0.2s'}} onClick={handleLogout}>
                     Log Out
                 </button>
