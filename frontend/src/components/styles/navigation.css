@@ -31,6 +31,9 @@
 
 .logo-icon {
     font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
 }
 
 .logo-text {
@@ -117,5 +120,7 @@
 
     .logo-icon {
         font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
     }
 }
