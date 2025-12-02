@@ -427,7 +427,6 @@ const CompanyProfile = () => {
         </div>
     );
 };
-
 const styles = {
     loadingContainer: {
         minHeight: '100vh',

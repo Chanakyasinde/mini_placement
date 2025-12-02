@@ -3,62 +3,69 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Students {
-  student_id       Int      @id @default(autoincrement())
-  studentName     String
-  password         String
-  phoneNumber     BigInt   @unique
-  email            String   @unique
-  college          String   @default("Unknown")
-  cgpa             String?
-  yearOfPassing    String?
-  resume_link      String
-  Applications    Applications[]
-  createdAt        DateTime @default(now())
+  student_id     Int           @id @default(autoincrement())
+  studentName    String
+  password       String
+  phoneNumber    BigInt        @unique
+  email          String        @unique
+  college        String        @default("Unknown")
+  cgpa           String?
+  yearOfPassing  String?
+  resume_link    String
+  Applications   Applications[]
+  createdAt      DateTime      @default(now())
 }
 
 model companies {
-  companyId      Int      @id @default(autoincrement())
-  companyName    String   @unique
-  email          String   @unique
-  password       String?
-  websiteUrl     String?
-  companyType    String?
-  industry       String?
-  location       String?
-  createdAt      DateTime @default(now())
-  status         Boolean  @default(false)
-  jobs           jobs[]
+  companyId    Int           @id @default(autoincrement())
+  companyName  String        @unique
+  email        String        @unique
+  password     String?
+  websiteUrl   String?
+  companyType  String?
+  industry     String?
+  location     String?
+  createdAt    DateTime      @default(now())
+  status       Boolean       @default(false)
+  jobs         jobs[]
 }
+
 model jobs {
-  jobId      Int        @id @default(autoincrement())
-  companyId   Int
-  jobTitle   String
-  isActive    Boolean    @default(true)
-  location    String?
-  stipend     String
-  description String?    @db.LongText
-  createdAt   DateTime   @default(now())
-  skills      skills[]   @relation("JobSkills")
-  company     companies  @relation(fields: [companyId], references: [companyId])
+  jobId        Int           @id @default(autoincrement())
+  companyId    Int
+  jobTitle     String
+  isActive     Boolean       @default(true)
+  location     String?
+  stipend      String
+  description  String?       // removed @db.LongText (MySQL only)
+  createdAt    DateTime      @default(now())
+  skills       skills[]      @relation("JobSkills")
+  company      companies     @relation(fields: [companyId], references: [companyId])
   Applications Applications[]
 }
-model skills{
-  skillId   Int @id @default(autoincrement())
-  skillName String @unique
-  jobs  jobs[]   @relation("JobSkills")
+
+model skills {
+  skillId   Int      @id @default(autoincrement())
+  skillName String   @unique
+  jobs      jobs[]   @relation("JobSkills")
 }
+
 model Applications {
-  applicationId Int      @id @default(autoincrement())
+  applicationId Int        @id @default(autoincrement())
   studentId     Int
   jobId         Int
-  appliedAt     DateTime @default(now())
-  status        String   @default("Applied")
-  student       Students @relation(fields: [studentId] , references:[student_id])
-  job           jobs     @relation(fields: [jobId], references:[jobId])
+  appliedAt     DateTime    @default(now())
+  status        String       @default("Applied")
+
+  student       Students     @relation(fields: [studentId], references: [student_id])
+  job           jobs         @relation(fields: [jobId], references: [jobId])
+
   @@unique([studentId, jobId])
 }
+ 
+

@@ -128,6 +128,128 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Footer Section */}
+      <footer id="about" className="footer-section">
+        <div className="footer-container">
+          <div className="footer-content">
+            {/* About Section */}
+            <div className="footer-column">
+              <h3 className="footer-heading">About PlacementHub</h3>
+              <p className="footer-description">
+                PlacementHub is your trusted partner in career success. We connect talented students with top companies,
+                providing a seamless platform for job discovery, applications, and placements.
+              </p>
+              <div className="footer-stats-mini">
+                <div className="mini-stat">
+                  <span className="mini-stat-value">10k+</span>
+                  <span className="mini-stat-label">Students</span>
+                </div>
+                <div className="mini-stat">
+                  <span className="mini-stat-value">800+</span>
+                  <span className="mini-stat-label">Companies</span>
+                </div>
+                <div className="mini-stat">
+                  <span className="mini-stat-value">95%</span>
+                  <span className="mini-stat-label">Success Rate</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Features Section */}
+            <div className="footer-column">
+              <h3 className="footer-heading">Key Features</h3>
+              <ul className="footer-list">
+                <li className="footer-list-item">
+                  <span className="list-icon">✓</span>
+                  Direct company connections
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">✓</span>
+                  Real-time job updates
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">✓</span>
+                  Easy application tracking
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">✓</span>
+                  Profile management
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">✓</span>
+                  Placement analytics
+                </li>
+              </ul>
+            </div>
+
+            {/* Why Choose Us Section */}
+            <div className="footer-column">
+              <h3 className="footer-heading">Why Choose Us</h3>
+              <ul className="footer-list">
+                <li className="footer-list-item">
+                  <span className="list-icon">🎯</span>
+                  Personalized job recommendations based on your profile and preferences
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">🚀</span>
+                  Fast-track your career with direct access to hiring managers
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">🔒</span>
+                  Secure and confidential application process
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">💡</span>
+                  Career guidance and placement support throughout your journey
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Section */}
+            <div className="footer-column">
+              <h3 className="footer-heading">Contact Us</h3>
+              <ul className="footer-list">
+                <li className="footer-list-item">
+                  <span className="list-icon">📧</span>
+                  support@placementhub.com
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">📞</span>
+                  +91 1800-123-4567
+                </li>
+                <li className="footer-list-item">
+                  <span className="list-icon">📍</span>
+                  Pune, India
+                </li>
+              </ul>
+              <div className="social-links">
+                <a href="#" className="social-icon" aria-label="LinkedIn">💼</a>
+                <a href="#" className="social-icon" aria-label="Twitter">🐦</a>
+                <a href="#" className="social-icon" aria-label="Facebook">📘</a>
+                <a href="#" className="social-icon" aria-label="Instagram">📷</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright Section */}
+          <div className="footer-bottom">
+            <div className="footer-divider"></div>
+            <div className="copyright-content">
+              <p className="copyright-text">
+                © {new Date().getFullYear()} PlacementHub. All rights reserved.
+              </p>
+              <div className="footer-legal">
+                <a href="#" className="legal-link">Privacy Policy</a>
+                <span className="legal-separator">•</span>
+                <a href="#" className="legal-link">Terms of Service</a>
+                <span className="legal-separator">•</span>
+                <a href="#" className="legal-link">Cookie Policy</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
 
   );
