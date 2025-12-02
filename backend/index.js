@@ -11,9 +11,8 @@ app.use(express.json());
 
 const companyRoutes = require("./company/routes.js");
 const studentRoutes = require("./student/routes/catalog.js");
-const adminRoutes = require("./admin/route.js");
 
-app.use("/admin", adminRoutes);
+
 app.use("/company", companyRoutes)
 app.use("/student", studentRoutes)
 
