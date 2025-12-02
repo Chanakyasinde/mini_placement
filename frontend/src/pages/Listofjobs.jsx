@@ -26,7 +26,7 @@ const ListOfJobs = ({ jobs, onRefresh }) => {
 
         try {
             const token = localStorage.getItem('companyToken');
-            const response = await fetch(`http://localhost:3000/company/dashboard/job/${jobId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/company/dashboard/job/${jobId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

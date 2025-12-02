@@ -23,7 +23,7 @@ const CompanyProfile = () => {
                 setError('Please login to access profile');
                 return;
             }
-            const response = await fetch(`http://localhost:3000/company/dashboard`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/company/dashboard`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ const CompanyProfile = () => {
     const handleSave = async () => {
         try {
             const token = localStorage.getItem('companyToken');
-            const response = await fetch(`http://localhost:3000/company/profile`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/company/profile`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

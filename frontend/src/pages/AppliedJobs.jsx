@@ -21,7 +21,7 @@ const AppliedJobs = () => {
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/student/jobsApplied`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/student/jobsApplied`, {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
             });

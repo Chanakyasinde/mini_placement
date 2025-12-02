@@ -15,7 +15,7 @@ const JobApplicants = () => {
     const fetchApplicants = async () => {
         try {
             const token = localStorage.getItem('companyToken');
-            const response = await fetch(`http://localhost:3000/company/jobs/appliedStudents?jobId=${jobId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/company/jobs/appliedStudents?jobId=${jobId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -40,7 +40,7 @@ const JobApplicants = () => {
     const updateStatus = async (applicationId, newStatus) => {
         try {
             const token = localStorage.getItem('companyToken');
-            const response = await fetch(`http://localhost:3000/company/jobs/application/${applicationId}/status`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/company/jobs/application/${applicationId}/status`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
