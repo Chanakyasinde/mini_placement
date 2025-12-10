@@ -45,15 +45,13 @@ const companylogin = async (req, res) => {
 const companydashboard = async (req, res) => {
   try {
 
-    const loggedInEmail = req.companyEmail; // From authentication middleware
+    const loggedInEmail = req.companyEmail;
     const company = await existingCompany(loggedInEmail);
 
 
     if (!company) {
       return res.status(404).json({ error: "Company not found" });
     }
-    console.log(company)
-
 
     return res.status(200).json({
       message: "Dashboard data fetched successfully",
@@ -75,7 +73,7 @@ const companydashboard = async (req, res) => {
 const updateCompanyProfile = async (req, res) => {
   try {
     const loggedInEmail = req.companyEmail;
-    const { companyId, email, ...updateData } = req.body; // Exclude companyId and email
+    const { companyId, email, ...updateData } = req.body;
 
     const updatedCompany = await updateCompany(loggedInEmail, updateData);
 

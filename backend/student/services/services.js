@@ -4,10 +4,7 @@ const prisma = new PrismaClient();
 const salt = 10
 
 const createStudentSignup = async (studentData) => {
-    console.log("Entered services page")
-
     const phoneAsBigInt = BigInt(studentData.phoneNumber);
-
     const alreadyExists = await prisma.students.findFirst({
         where: {
             OR: [
@@ -39,8 +36,6 @@ const createStudentSignup = async (studentData) => {
 }
 
 const checkStudentLogin = async (studentData) => {
-    console.log("Entered check student login service")
-
     const checkLogin = await prisma.students.findFirst({
         where: { email: studentData.email }
     })
@@ -59,7 +54,6 @@ const checkStudentLogin = async (studentData) => {
 }
 
 const studentInformation = async (studentEmail) => {
-    console.log("entered services of dashboard")
     const studentInfo = await prisma.students.findUnique({
         where: {
             email: studentEmail
@@ -82,7 +76,6 @@ const fetchJobsForStudent = async (studentEmail) => {
             skills: true
         },
     })
-    console.log("Jobs fetched:", job)
     return job
 }
 const applicationToJob = async (studentEmail, jobId) => {
