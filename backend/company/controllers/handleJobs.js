@@ -18,15 +18,12 @@ const createJobs = async (req, res) => {
         };
 
         const created = await createJobIfNotExists(jobData);
-        console.log("Job created:", created);
 
         return res.status(201).json({
             message: "Job Created Successfully",
             data: created
         });
     } catch (err) {
-
-        console.error("Create Job Error:", err);
         return res.status(500).json({
             message: "Something is wrong",
             error: err.message
@@ -75,7 +72,6 @@ const getJobById = async (req, res) => {
             }
         }
     });
-    console.log("Fetched Job:", job);
     return res.status(200).json({ message: "Job fetched Successfully", data: job })
 }
 
@@ -83,7 +79,6 @@ const updateJob = async (req, res) => {
     const job_id = Number(req.params.id);
     const updateData = req.body;
     const companyEmail = req.companyEmail;
-    console.log("Update Data:", updateData);
 
     const company = await prisma.companies.findFirst({
         where: { email: companyEmail }
@@ -124,13 +119,9 @@ const deleteJob = async (req, res) => {
         if (!company) {
             return res.status(404).json({ message: "Company not found" });
         }
-
-        // Step 1: Delete related applications
         await prisma.applications.deleteMany({
             where: { jobId: job_id }
         });
-
-        // Step 2: Delete job
         await prisma.jobs.delete({
             where: { jobId: job_id }
         });
@@ -138,7 +129,6 @@ const deleteJob = async (req, res) => {
         return res.status(200).json({ message: "Job Deleted Successfully" });
 
     } catch (err) {
-        console.log("Error deleting job:", err);
         return res.status(500).json({ message: "Could not delete job", error: err });
     }
 };
@@ -154,7 +144,7 @@ const getNumberOfStudentsApplied = async (req, res) => {
             ...app,
             student: {
                 ...app.student,
-                phoneNumber: app.student.phoneNumber?.toString()  // BIGINT → string
+                phoneNumber: app.student.phoneNumber?.toString()
             }
         }));
 
@@ -178,8 +168,6 @@ const updateApplicationStatus = async (req, res) => {
         if (!['Shortlisted', 'Rejected', 'Applied'].includes(status)) {
             return res.status(400).json({ message: "Invalid status" });
         }
-
-        // Verify company owns the job associated with this application
         const company = await prisma.companies.findFirst({
             where: { email: companyEmail }
         });
@@ -212,7 +200,6 @@ const updateApplicationStatus = async (req, res) => {
         });
 
     } catch (err) {
-        console.error("Update Application Status Error:", err);
         return res.status(500).json({ message: "Could not update status", error: err.message });
     }
 }

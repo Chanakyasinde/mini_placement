@@ -26,7 +26,6 @@ const studentSignUp = async (req, res) => {
 }
 
 const studentLogin = async (req, res) => {
-    console.log("Entered student login controller");
     try {
         const studentData = req.body;
         const student = await checkStudentLogin(studentData);
