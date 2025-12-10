@@ -1,8 +1,5 @@
 const studentValidateSignUp = (req, res, next) => {
     const { studentName, phoneNumber, email, password } = req.body;
-    console.log("Entered middleware");
-
-
     if (!studentName || typeof studentName !== "string" || studentName.trim().length === 0) {
         return res.status(400).json({ message: "Invalid Student name" });
     }
@@ -24,7 +21,6 @@ const studentValidateSignUp = (req, res, next) => {
 
 const studentValidateLogin = (req, res, next) => {
     const {  email,password } = req.body;
-    console.log("Entered login middleware");
 
     if (!password || typeof password !== "string" || password.trim().length < 6) {
         return res.status(400).json({ message: "Invalid Password" });

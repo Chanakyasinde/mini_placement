@@ -36,7 +36,6 @@ const existingCompany = async (email) => {
   const company = await prisma.companies.findFirst({
     where: { email: email }
   });
-  console.log("Company fetched:", company);
 
   if (!company) {
     throw new Error('Invalid company name or email');
@@ -73,7 +72,6 @@ const createJobIfNotExists = async (jobData) => {
     },
     include: { skills: true }
   })
-  console.log("New job created:", newJob);
   return newJob;
 
 }
@@ -89,12 +87,10 @@ const updateCompany = async (email, updateData) => {
 };
 
 const getStudentJobsData = async (companyEmail, jobId) => {
-  console.log("Inside get student jobs data function");
   const companyHere = await prisma.companies.findFirst({
     where: { email: companyEmail }
   })
   const jobIdNumber = Number(jobId);
-  console.log("Company details fetched:", companyHere, jobId);
   const student = await prisma.jobs.findFirst({
     where: {
       companyId: companyHere.companyId,
@@ -118,7 +114,6 @@ const getStudentJobsData = async (companyEmail, jobId) => {
     }
   });
 
-  console.log("Students applied data:", student);
   return student
 }
 
