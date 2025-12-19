@@ -149,17 +149,24 @@ const fetchAppliedJobs = async (studentEmail) => {
     console.log("Applied jobs fetched:", application)
     return application
 }
-const totalJobs = async (req,res) => {
-    const jobs = await prisma.jobs.findMany({
-        where: {
-            isActive: true,
-        },
-        include: {
-            company: {
-                status: true
+const totalJobs = async (req, res) => {
+    try {
+        const jobs = await prisma.jobs.findMany({
+            where: {
+                isActive: true,
+                company: {
+                    status: true
+                }
+            },
+            include: {
+                company: true,
+                skills: true
             }
-        }
-    })
-    return res.status(200).json(jobs)
+        })
+        return res.status(200).json(jobs)
+    } catch (error) {
+        console.error("Error fetching total jobs:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 }
 module.exports = { createStudentSignup, checkStudentLogin, studentInformation, fetchJobsForStudent, applicationToJob, studentUpdated, fetchAppliedJobs, totalJobs }

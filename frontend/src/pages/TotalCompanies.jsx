@@ -47,7 +47,10 @@ const TotalCompanies = () => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <div style={styles.logo} onClick={() => navigate('/')}>PlacementHub</div>
+                <div style={styles.brandContainer} onClick={() => navigate('/')}>
+                    <img src="/job-search.png" alt="PlacementHub Logo" style={styles.logoIcon} />
+                    <div style={styles.logo}>PlacementHub</div>
+                </div>
                 <div style={styles.headerButtons}>
                     <button style={styles.loginButton} onClick={() => navigate('/login')}>Login</button>
                     <button style={styles.signupButton} onClick={() => navigate('/signup')}>Sign Up</button>
@@ -130,6 +133,16 @@ const styles = {
         fontSize: '1.5rem',
         fontWeight: 'bold',
         cursor: 'pointer',
+    },
+    brandContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.75rem',
+        cursor: 'pointer',
+    },
+    logoIcon: {
+        height: '40px',
+        width: 'auto',
     },
     headerButtons: {
         display: 'flex',
@@ -220,6 +233,7 @@ const styles = {
         color: '#3b82f6',
         textDecoration: 'none',
         fontSize: '0.95rem',
+        wordBreak: 'break-all',
     },
     viewJobsButton: {
         marginTop: 'auto',
