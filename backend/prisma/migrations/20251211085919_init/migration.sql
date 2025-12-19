@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Students" (
+CREATE TABLE "students" (
     "student_id" SERIAL NOT NULL,
     "studentName" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE "Students" (
     "resume_link" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Students_pkey" PRIMARY KEY ("student_id")
+    CONSTRAINT "students_pkey" PRIMARY KEY ("student_id")
 );
 
 -- CreateTable
@@ -53,14 +53,14 @@ CREATE TABLE "skills" (
 );
 
 -- CreateTable
-CREATE TABLE "Applications" (
+CREATE TABLE "applications" (
     "applicationId" SERIAL NOT NULL,
     "studentId" INTEGER NOT NULL,
     "jobId" INTEGER NOT NULL,
     "appliedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "status" TEXT NOT NULL DEFAULT 'Applied',
 
-    CONSTRAINT "Applications_pkey" PRIMARY KEY ("applicationId")
+    CONSTRAINT "applications_pkey" PRIMARY KEY ("applicationId")
 );
 
 -- CreateTable
@@ -70,10 +70,10 @@ CREATE TABLE "_JobSkills" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Students_phoneNumber_key" ON "Students"("phoneNumber");
+CREATE UNIQUE INDEX "students_phoneNumber_key" ON "students"("phoneNumber");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Students_email_key" ON "Students"("email");
+CREATE UNIQUE INDEX "students_email_key" ON "students"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "companies_companyName_key" ON "companies"("companyName");
@@ -85,7 +85,7 @@ CREATE UNIQUE INDEX "companies_email_key" ON "companies"("email");
 CREATE UNIQUE INDEX "skills_skillName_key" ON "skills"("skillName");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Applications_studentId_jobId_key" ON "Applications"("studentId", "jobId");
+CREATE UNIQUE INDEX "applications_studentId_jobId_key" ON "applications"("studentId", "jobId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_JobSkills_AB_unique" ON "_JobSkills"("A", "B");
@@ -97,10 +97,10 @@ CREATE INDEX "_JobSkills_B_index" ON "_JobSkills"("B");
 ALTER TABLE "jobs" ADD CONSTRAINT "jobs_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("companyId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Applications" ADD CONSTRAINT "Applications_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Students"("student_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "applications" ADD CONSTRAINT "applications_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("student_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Applications" ADD CONSTRAINT "Applications_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "jobs"("jobId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "applications" ADD CONSTRAINT "applications_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "jobs"("jobId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_JobSkills" ADD CONSTRAINT "_JobSkills_A_fkey" FOREIGN KEY ("A") REFERENCES "jobs"("jobId") ON DELETE CASCADE ON UPDATE CASCADE;

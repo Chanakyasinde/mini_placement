@@ -8,7 +8,7 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Students {
+model students {
   student_id     Int           @id @default(autoincrement())
   studentName    String
   password       String
@@ -18,7 +18,7 @@ model Students {
   cgpa           String?
   yearOfPassing  String?
   resume_link    String
-  Applications   Applications[]
+  Applications   applications[]
   createdAt      DateTime      @default(now())
 }
 
@@ -47,7 +47,7 @@ model jobs {
   createdAt    DateTime      @default(now())
   skills       skills[]      @relation("JobSkills")
   company      companies     @relation(fields: [companyId], references: [companyId])
-  Applications Applications[]
+  Applications applications[]
 }
 
 model skills {
@@ -56,14 +56,14 @@ model skills {
   jobs      jobs[]   @relation("JobSkills")
 }
 
-model Applications {
+model applications {
   applicationId Int        @id @default(autoincrement())
   studentId     Int
   jobId         Int
   appliedAt     DateTime    @default(now())
   status        String       @default("Applied")
 
-  student       Students     @relation(fields: [studentId], references: [student_id])
+  student       students     @relation(fields: [studentId], references: [student_id])
   job           jobs         @relation(fields: [jobId], references: [jobId])
 
   @@unique([studentId, jobId])
