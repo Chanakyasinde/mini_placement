@@ -90,17 +90,14 @@ export default function Home() {
         <div className="stat-group companies-section">
           <h3 className="section-title">800+ Active Hiring Partners</h3>
           <div className="logos-grid">
-            <img src="https://logo.clearbit.com/google.com" alt="Google" className="company-logo" />
-            <img src="https://logo.clearbit.com/amazon.com" alt="Amazon" className="company-logo" />
-            <img src="https://logo.clearbit.com/microsoft.com" alt="Microsoft" className="company-logo" />
-            <img src="https://logo.clearbit.com/swiggy.com" alt="Swiggy" className="company-logo" />
-            <img src="https://logo.clearbit.com/zomato.com" alt="Zomato" className="company-logo" />
-            <img src="https://logo.clearbit.com/uber.com" alt="Uber" className="company-logo" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Indian_Space_Research_Organisation_Logo.svg" alt="ISRO" className="company-logo" />
-            <img src="https://logo.clearbit.com/cred.club" alt="Cred" className="company-logo" />
-            <img src="https://logo.clearbit.com/zeptonow.com" alt="Zepto" className="company-logo" />
-            <img src="https://logo.clearbit.com/netflix.com" alt="Netflix" className="company-logo" />
-            <img src="https://logo.clearbit.com/flipkart.com" alt="Flipkart" className="company-logo" />
+            <img
+              src="https://cdn.prod.website-files.com/62e8d2ea218fb7676b6892a6/690088550087fff97b2bff50_a4d26bf4a67f01a9fd55ed9e4fc3674a_hero-logos-hfs.avif"
+              loading="eager"
+              sizes="(max-width: 1554px) 100vw, 1554px"
+              srcSet="https://cdn.prod.website-files.com/62e8d2ea218fb7676b6892a6/690088550087fff97b2bff50_a4d26bf4a67f01a9fd55ed9e4fc3674a_hero-logos-hfs-p-500.png 500w, https://cdn.prod.website-files.com/62e8d2ea218fb7676b6892a6/690088550087fff97b2bff50_a4d26bf4a67f01a9fd55ed9e4fc3674a_hero-logos-hfs-p-800.png 800w, https://cdn.prod.website-files.com/62e8d2ea218fb7676b6892a6/690088550087fff97b2bff50_a4d26bf4a67f01a9fd55ed9e4fc3674a_hero-logos-hfs-p-1080.png 1080w, https://cdn.prod.website-files.com/62e8d2ea218fb7676b6892a6/690088550087fff97b2bff50_a4d26bf4a67f01a9fd55ed9e4fc3674a_hero-logos-hfs.avif 1554w"
+              alt="Hiring Partners"
+              className="hfs-leaders_company-logos"
+            />
           </div>
           <p className="section-desc">Join the league of top-tier professionals.</p>
         </div>
