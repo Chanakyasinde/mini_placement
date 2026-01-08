@@ -117,6 +117,16 @@ export default function Signup() {
         </div>
 
         <p style={styles.helperText}>Choose your role to get started to the appropriate signup process. Students join tot find opportunities,companies join to find talent.</p>
+
+        <div style={styles.trustSignals}>
+          <h3 style={styles.projectTitle}>MiniPlacer</h3>
+          <p style={styles.studentNames}>Built by <strong>team of CAL4s</strong></p>
+          <div style={styles.disclaimerBox}>
+            <p style={styles.disclaimerText}>
+              Student Project - For Educational Purposes Only. Please provide only the fake information.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* ---------------- Right Column Data accordingly ---------------- */}
@@ -212,6 +222,39 @@ const styles = {
   helperText: {
     marginTop: 12,
     opacity: 0.6
+  },
+
+  trustSignals: {
+    marginTop: "auto",
+    paddingTop: 40,
+    borderTop: "1px solid #333",
+  },
+
+  projectTitle: {
+    fontSize: 20,
+    fontWeight: 700,
+    marginBottom: 8,
+    color: "#fff",
+  },
+
+  studentNames: {
+    fontSize: 14,
+    color: "#a3a3a3",
+    marginBottom: 16,
+  },
+
+  disclaimerBox: {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    padding: "8px 12px",
+    borderRadius: 8,
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+  },
+
+  disclaimerText: {
+    fontSize: 12,
+    color: "#d4d4d4",
+    fontWeight: 500,
+    margin: 0,
   },
 
   rightPane: {
