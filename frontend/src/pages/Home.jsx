@@ -227,6 +227,15 @@ export default function Home() {
           {/* Copyright Section */}
           <div className="footer-bottom">
             <div className="footer-divider"></div>
+
+            {/* Trust Signals for Home Page */}
+            <div className="trust-signals-home" style={{ textAlign: "center", padding: "20px 0", color: "#a3a3a3" }}>
+              <h4 style={{ color: "#fff", marginBottom: "5px" }}>MiniPlacer - Built by team of CAL4s</h4>
+              <p style={{ fontSize: "12px", opacity: 0.8 }}>
+                Student Project - For Educational Purposes Only. Please don't provide real information.
+              </p>
+            </div>
+
             <div className="copyright-content">
               <p className="copyright-text">
                 © {new Date().getFullYear()} PlacementHub. All rights reserved.
