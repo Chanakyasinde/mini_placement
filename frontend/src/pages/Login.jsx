@@ -6,6 +6,7 @@ export default function Login() {
   const navigate = useNavigate()
   const [selected, setSelected] = useState("student");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [studentLogin, setStudentLogin] = useState({
     email: "",
@@ -44,6 +45,7 @@ export default function Login() {
       selected === "student" ? "/student/login" : "/company/login";
 
     try {
+      setIsLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,10 +61,11 @@ export default function Login() {
       localStorage.setItem(`${selected}Token`, data.token);
       navigate(selected === "student" ? '/student/dashboard' : "/company/dashboard")
 
-
     } catch (error) {
       console.error("Login Error:", error);
       alert(error.message || "An error occurred during login. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,6 +112,18 @@ export default function Login() {
           Choose your role to log in and access your dashboard.
         </p>
 
+        <div style={styles.credentialBox}>
+          <p style={styles.credentialText}>
+            For website checking please login with following {selected} info:
+          </p>
+          <p style={styles.credentialText}>
+            Email: <strong>{selected === "student" ? "batman@gmail.com" : "mysocial@gmail.com"}</strong>
+          </p>
+          <p style={styles.credentialText}>
+            Password: <strong>{selected === "student" ? "batman" : "123456"}</strong>
+          </p>
+        </div>
+
         <div style={styles.trustSignals}>
           <h3 style={styles.projectTitle}>MiniPlacer</h3>
           <p style={styles.studentNames}>Built by <strong>team of CAL4s</strong></p>
@@ -145,8 +160,8 @@ export default function Login() {
               </div>
             ))}
 
-            <button type="submit" style={styles.button}>
-              {selected === "student" ? "Login as Student" : "Login as Company"}
+            <button type="submit" style={{ ...styles.button, opacity: isLoading ? 0.7 : 1 }} disabled={isLoading}>
+              {isLoading ? "Loading... Please wait" : (selected === "student" ? "Login as Student" : "Login as Company")}
             </button>
           </form>
         </div>
@@ -302,5 +317,23 @@ const styles = {
     borderRadius: 10,
     fontWeight: 800,
     cursor: "pointer",
+  },
+
+  credentialBox: {
+    marginTop: 20,
+    padding: 16,
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: 12,
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+
+  credentialText: {
+    fontSize: 13,
+    color: "#d4d4d4",
+    lineHeight: "1.5",
+    margin: 0,
   },
 };
