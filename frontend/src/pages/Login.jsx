@@ -68,6 +68,20 @@ export default function Login() {
       setIsLoading(false);
     }
   };
+  const handleClick = () => {
+    setStudentLogin({
+      email: "batman@gmail.com",
+      password: "batman"
+    })
+
+  }
+  const handleClicks = () => {
+    setCompanyLogin({
+      email: "mysocial@gmail.com",
+      password: "123456"
+    })
+
+  }
 
   return (
     <div style={styles.page}>
@@ -122,6 +136,7 @@ export default function Login() {
           <p style={styles.credentialText}>
             Password: <strong>{selected === "student" ? "batman" : "123456"}</strong>
           </p>
+          <button onClick={selected == "student" ? handleClick : handleClicks}>Autofill</button>
         </div>
 
         <div style={styles.trustSignals}>
